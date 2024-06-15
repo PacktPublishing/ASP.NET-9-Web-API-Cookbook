@@ -1,0 +1,6 @@
+@cookbook_HostAddress = http://localhost:5148
+
+GET {{cookbook_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

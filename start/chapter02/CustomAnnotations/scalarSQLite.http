@@ -1,0 +1,6 @@
+@scalarSQLite_HostAddress = http://localhost:5287
+
+GET {{scalarSQLite_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
