@@ -54,14 +54,14 @@ namespace SignalRServer.Controllers
         if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
         {
             var userRoles = await _userManager.GetRolesAsync(user);
-            var token = await GenerateJwtToken(user, userRoles);
+            var token = GenerateJwtToken(user, userRoles);
             
             return Ok(new { token, user.UserName, Roles = userRoles });
         }
         return Unauthorized("Invalid username or password");
     }
 
-    private async Task<string> GenerateJwtToken(IdentityUser user, IList<string> roles)
+    private string GenerateJwtToken(IdentityUser user, IList<string> roles)
     {
         var claims = new List<Claim>
         {
