@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SignalR Messaging Client</title>
+    <style>
+        #messageBox {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 20px;
+            height: 150px;
+            overflow-y: auto;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>SignalR Messaging Client</h1>
+    
+    <div id="loginSection">
+        <h2>Login</h2>
+        <input type="text" id="loginUsername" placeholder="Username">
+        <input type="password" id="loginPassword" placeholder="Password">
+        <button onclick="login()">Login</button>
+    </div>
+
+    <div id="messagingSection" class="hidden">
+        <h2>Send Message</h2>
+        <button onclick="sendMessageToAll()">Send to All</button>
+        <button onclick="sendDirectMessage()">Send Direct Message</button>
+        <button onclick="sendGroupMessage()">Send Group Message</button>
+        <button onclick="addUserToGroup()">Add User to Group (Admin)</button>
+        <button onclick="removeUserFromGroup()">Remove User from Group (Admin)</button>
+        <button onclick="logout()">Logout</button>
+    </div>
+    <div id="registerSection">
+    <h2>Register</h2>
+        <input type="text" id="registerUsername" placeholder="Username">
+        <input type="password" id="registerPassword" placeholder="Password">
+        <button onclick="register()">Register</button>
+    </div>
+
+    <div id="messageBox"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
+    <script>
+        let connection;
+        let bearerToken = '';
+
+        function addMessage(message) {
+            const messageBox = document.getElementById("messageBox");
+            messageBox.innerHTML += message + "<br>";
+            messageBox.scrollTop = messageBox.scrollHeight;
+        }
+
+        async function login() {
+            const username = document.getElementById("loginUsername").value;
+            const password = document.getElementById("loginPassword").value;
+
+            try {
+                const response = await fetch('https://localhost:5001/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    bearerToken = data.token;
+                    addMessage("Login successful!");
+                    document.getElementById("loginSection").classList.add("hidden");
+                    document.getElementById("messagingSection").classList.remove("hidden");
+                    await connectToHub();
+                } else {
+                    const errorText = await response.text();
+                    addMessage("Login failed: " + errorText);
+                }
+            } catch (error) {
+                addMessage("Error during login: " + error);
+            }
+        }
+
+        async function register() {
+            const username = document.getElementById("registerUsername").value;
+            const password = document.getElementById("registerPassword").value;
+
+            try {
+                const response = await fetch('https://localhost:5001/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                if (response.ok) {
+                    addMessage("Registration successful! You can now log in.");
+                } else {
+                    const errorText = await response.text();
+                    addMessage("Registration failed: " + errorText);
+                }
+            } catch (error) {
+                addMessage("Error during registration: " + error);
+            }
+        }
+
+        async function connectToHub() {
+            connection = new signalR.HubConnectionBuilder()
+                .withUrl("https://localhost:5001/messagingHub", { 
+                    accessTokenFactory: () => bearerToken 
+                })
+                .withAutomaticReconnect()
+                .build();
+
+            connection.on("ReceiveMessage", (user, message) => {
+                addMessage(`${user}: ${message}`);
+            });
+
+            connection.on("ReceiveDirectMessage", (user, message) => {
+                addMessage(`[Direct] ${user}: ${message}`);
+            });
+
+            connection.on("ReceiveGroupMessage", (user, group, message) => {
+                addMessage(`${user} in ${group}: ${message}`);
+            });
+
+            connection.on("UserConnected", (user) => {
+                addMessage(`${user} connected`);
+            });
+
+            connection.on("UserDisconnected", (user) => {
+                addMessage(`${user} disconnected`);
+            });
+
+            try {
+                await connection.start();
+                addMessage("Connected to the messaging hub.");
+            } catch (err) {
+                addMessage("Error connecting to hub: " + err);
+            }
+        }
+
+        async function sendMessageToAll() {
+            const message = prompt("Enter message:");
+            if (message) {
+                try {
+                    await connection.invoke("SendToAll", message);
+                } catch (err) {
+                    addMessage("Error sending message: " + err);
+                }
+            }
+        }
+
+        async function sendDirectMessage() {
+            const recipient = prompt("Enter recipient username:");
+            const message = prompt("Enter message:");
+            if (recipient && message) {
+                try {
+                    await connection.invoke("SendToIndividual", recipient, message);
+                } catch (err) {
+                    addMessage("Error sending direct message: " + err);
+                }
+            }
+        }
+
+        async function sendGroupMessage() {
+            const group = prompt("Enter group name:");
+            const message = prompt("Enter message:");
+            if (group && message) {
+                try {
+                    await connection.invoke("SendToGroup", group, message);
+                } catch (err) {
+                    addMessage("Error sending group message: " + err);
+                }
+            }
+        }
+
+        async function addUserToGroup() {
+            const username = prompt("Enter username to add:");
+            const group = prompt("Enter group name:");
+            if (username && group) {
+                try {
+                    await connection.invoke("AddUserToGroup", username, group);
+                    addMessage(`User ${username} added to group ${group}`);
+                } catch (err) {
+                    addMessage("Error adding user to group: " + err);
+                }
+            }
+        }
+
+        async function removeUserFromGroup() {
+            const username = prompt("Enter username to remove:");
+            const group = prompt("Enter group name:");
+            if (username && group) {
+                try {
+                    await connection.invoke("RemoveUserFromGroup", username, group);
+                    addMessage(`User ${username} removed from group ${group}`);
+                } catch (err) {
+                    addMessage("Error removing user from group: " + err);
+                }
+            }
+        }
+
+        function logout() {
+            bearerToken = '';
+            if (connection) {
+                connection.stop();
+            }
+            document.getElementById("loginSection").classList.remove("hidden");
+            document.getElementById("messagingSection").classList.add("hidden");
+            addMessage("Logged out successfully.");
+        }
+    </script>
+</body>
+</html>

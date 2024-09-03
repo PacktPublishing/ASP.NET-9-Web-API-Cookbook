@@ -1,6 +1,0 @@
-@opinionPoll_HostAddress = http://localhost:5043
-
-GET {{opinionPoll_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
