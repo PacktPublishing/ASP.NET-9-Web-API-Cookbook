@@ -5,7 +5,6 @@ using Microsoft.IdentityModel.Tokens;
 using SignalRServer.Data;
 using System.Text;
 using System.Security.Claims;
-using SignalRServer.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,7 +59,6 @@ builder.Services.AddAuthorization(options =>
 });
 
 builder.Services.AddSingleton<IUserConnectionManager, UserConnectionManager>();
-builder.Services.AddSingleton<ICustomGroupManager, CustomGroupManager>();
 
 builder.Services.AddSignalR(hubOptions => 
 {
