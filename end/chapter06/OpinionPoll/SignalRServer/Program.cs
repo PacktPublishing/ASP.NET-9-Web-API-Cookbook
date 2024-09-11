@@ -12,9 +12,8 @@ builder.Services.AddSignalR();
 
 var app = builder.Build();
 
-app.UseHttpsRedirection();
-
 app.UseAuthorization();
+app.UseStaticFiles();
 
 app.MapHub<VotingHub>("/votingHub");
 app.MapControllers();
