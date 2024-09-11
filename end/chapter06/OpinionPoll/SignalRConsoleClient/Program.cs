@@ -60,7 +60,7 @@ try
 
         var action = Console.ReadLine();
 
-        if (action == "exit")
+        if (action == "q" || action == "exit")
             break;
 
         if (action == "r")
