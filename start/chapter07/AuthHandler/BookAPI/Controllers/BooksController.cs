@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using books.Services;
 using books.Models;
+using Microsoft.AspNetCore.Authorization;
 using System.Text.Json;
 
 namespace books.Controllers;
@@ -53,6 +54,7 @@ public class BooksController : ControllerBase
         }
     }
 
+    [Authorize]
     [HttpGet("{id}")]
     [EndpointSummary("Get a book by Id")]
     [EndpointDescription("Returns a single book by its Id from our SQLite database, using EF Core")]
