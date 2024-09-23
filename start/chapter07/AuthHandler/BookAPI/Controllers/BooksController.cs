@@ -3,6 +3,7 @@ using books.Services;
 using books.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.Json;
+using System.Security.Claims;
 
 namespace books.Controllers;
 
@@ -17,13 +18,46 @@ public class BooksController : ControllerBase
         _service = service;
     }
 
+    [HttpGet("claims")]
+    public IActionResult GetClaims()
+    {
+        Console.WriteLine($"IsAuthenticated: {User.Identity?.IsAuthenticated}");
+        Console.WriteLine($"AuthenticationType: {User.Identity?.AuthenticationType}");
+        Console.WriteLine($"Name: {User.Identity?.Name}");
+        Console.WriteLine("Claims:");
+        foreach (var claim in User.Claims)
+        {
+            Console.WriteLine($"  Type: {claim.Type}, Value: {claim.Value}");
+        }
+        
+        return Ok(new
+        {
+            IsAuthenticated = User.Identity?.IsAuthenticated,
+            AuthenticationType = User.Identity?.AuthenticationType,
+            Name = User.Identity?.Name,
+            Claims = User.Claims.Select(c => new { c.Type, c.Value })
+        });
+    }
+
+    [HttpGet("Hi")]
+    public IActionResult GetUsername()
+    {
+        foreach (var claim in User.Claims)
+        {
+            Console.WriteLine($"Type: {claim.Type}, Value: {claim.Value}");
+        }
+        var userId = HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        return Ok($"Hello #{userId}");
+    }
+
+
     [HttpGet]
     [EndpointSummary("Paged Book Inforation")]
     [EndpointDescription("This returns all the books from our SQLite database, using EF Core")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IReadOnlyCollection<BookDTO>))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ResponseCache(Duration = 60, VaryByQueryKeys = new[] { "pageSize", "lastId" })]
-
     public async Task<IActionResult> GetBooks([FromQuery] int pageSize = 10, [FromQuery] int lastId = 0)
     {
         try
@@ -52,6 +86,13 @@ public class BooksController : ControllerBase
         {
             return StatusCode(500, "An error occurred while fetching event registrations.");
         }
+    }
+
+    [Authorize]
+    [HttpGet("{auth}")]
+    public async Task<IActionResult> TestAuth()
+    {
+        return Ok();
     }
 
     [Authorize]

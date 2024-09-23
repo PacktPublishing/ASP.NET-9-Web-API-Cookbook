@@ -4260,27 +4260,30 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\my-coding-projects\\officialPacktRepo\\ASP.NET-9-Web-API-Cookbook\\start\\chapter07\\AuthHandler\\Unit.Tests\\Unit.Tests.csproj",
+      "projectUniqueName": "C:\\my-coding-projects\\bookInProcess\\AuthHandler\\Unit.Tests\\Unit.Tests.csproj",
       "projectName": "Unit.Tests",
-      "projectPath": "C:\\my-coding-projects\\officialPacktRepo\\ASP.NET-9-Web-API-Cookbook\\start\\chapter07\\AuthHandler\\Unit.Tests\\Unit.Tests.csproj",
+      "projectPath": "C:\\my-coding-projects\\bookInProcess\\AuthHandler\\Unit.Tests\\Unit.Tests.csproj",
       "packagesPath": "C:\\Users\\laved\\.nuget\\packages\\",
-      "outputPath": "C:\\my-coding-projects\\officialPacktRepo\\ASP.NET-9-Web-API-Cookbook\\start\\chapter07\\AuthHandler\\Unit.Tests\\obj\\",
+      "outputPath": "C:\\my-coding-projects\\bookInProcess\\AuthHandler\\Unit.Tests\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\laved\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\laved\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "C:\\my-coding-projects\\officialPacktRepo\\ASP.NET-9-Web-API-Cookbook\\start\\chapter07\\AuthHandler\\BookAPI\\bookAPI.csproj": {
-              "projectPath": "C:\\my-coding-projects\\officialPacktRepo\\ASP.NET-9-Web-API-Cookbook\\start\\chapter07\\AuthHandler\\BookAPI\\bookAPI.csproj"
+            "C:\\my-coding-projects\\bookInProcess\\AuthHandler\\BookAPI\\bookAPI.csproj": {
+              "projectPath": "C:\\my-coding-projects\\bookInProcess\\AuthHandler\\BookAPI\\bookAPI.csproj"
             }
           }
         }

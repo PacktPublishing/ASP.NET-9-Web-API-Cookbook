@@ -3,7 +3,7 @@ using Serilog.Events;
 
 namespace books;
 
-public class Program
+public partial class Program
 {
     public static void Main(string[] args)
     {

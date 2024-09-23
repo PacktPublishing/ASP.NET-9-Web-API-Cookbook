@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "JSfW6DAGDyg=",
+  "dgSpecHash": "TZTDSCdNxmU=",
   "success": true,
-  "projectFilePath": "C:\\my-coding-projects\\officialPacktRepo\\ASP.NET-9-Web-API-Cookbook\\start\\chapter07\\AuthHandler\\Unit.Tests\\Unit.Tests.csproj",
+  "projectFilePath": "C:\\my-coding-projects\\bookInProcess\\AuthHandler\\Unit.Tests\\Unit.Tests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\laved\\.nuget\\packages\\autofixture\\5.0.0-preview0011\\autofixture.5.0.0-preview0011.nupkg.sha512",
     "C:\\Users\\laved\\.nuget\\packages\\autofixture.autonsubstitute\\4.18.1\\autofixture.autonsubstitute.4.18.1.nupkg.sha512",

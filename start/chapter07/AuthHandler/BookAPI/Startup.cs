@@ -88,6 +88,23 @@ public class Startup
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
+        app.Use(async (context, next) =>
+        {
+            var logger = context.RequestServices.GetRequiredService<ILogger<Startup>>();
+            if (context.User.Identity!.IsAuthenticated)
+            {
+                logger.LogInformation("Authenticated request. Claims:");
+                foreach (var claim in context.User.Claims)
+                {
+                    logger.LogInformation($"Type: {claim.Type}, Value: {claim.Value}");
+                }
+            }
+            else
+            {
+                logger.LogInformation("Unauthenticated request");
+            }
+            await next();
+        });
 
         app.UseEndpoints(endpoints =>
         {
