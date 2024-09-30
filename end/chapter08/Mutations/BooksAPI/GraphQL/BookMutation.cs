@@ -9,7 +9,7 @@ namespace books.GraphQL;
 [ExtendObjectType(Name = "Mutation")]
 public class BookMutations
 {
-	[Error(typeof(BookAlreadyExistsError))]
+	[Error(typeof(BookAlreadyExistsException))]
 	public async Task<AddBookPayload> AddBookAsync(
 		AddBookInput input,
 		[Service] IBooksService booksService,
