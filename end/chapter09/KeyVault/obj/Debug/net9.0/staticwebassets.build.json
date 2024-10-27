@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "hkceX7oiTV5hEGH6E4ltyQgpzIbKWS9BTlFxK9/LexU=",
+  "Source": "mapAPI",
+  "BasePath": "_content/mapAPI",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

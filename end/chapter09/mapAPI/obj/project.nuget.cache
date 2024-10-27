@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "6Mlp0cyJzN4=",
+  "success": true,
+  "projectFilePath": "C:\\my-coding-projects\\chapter9b\\mapAPI\\mapAPI.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\laved\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.0-rc.2.24474.3\\microsoft.aspnetcore.openapi.9.0.0-rc.2.24474.3.nupkg.sha512",
+    "C:\\Users\\laved\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": []
+}
