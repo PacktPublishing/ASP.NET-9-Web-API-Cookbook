@@ -65,15 +65,15 @@ public class BooksController : ControllerBase
 
         try
         {
-            var books = await _service.GetBookByIdAsync(id);
+            var book = await _service.GetBookByIdAsync(id);
 
-            if (books == null)
+            if (book == null)
             {
                 return NotFound();
             }
 
 
-            return Ok(books);
+            return Ok(book);
         }
         catch (Exception)
         {
