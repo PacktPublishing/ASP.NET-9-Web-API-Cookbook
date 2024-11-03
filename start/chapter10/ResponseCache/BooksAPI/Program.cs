@@ -62,7 +62,6 @@ public class Program
                 options.MessageTemplate = "HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms. Controller: {ControllerName}, Action: {ActionName}";
             });
 
-            app.UseResponseCaching();
             app.UseCors();
             app.UseRouting();
             app.UseWebSockets();
