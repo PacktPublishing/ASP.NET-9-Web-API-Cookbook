@@ -10,14 +10,16 @@ namespace Books.Controllers;
 public class BooksController : ControllerBase
 {
     private readonly IBooksService _service;
+    private readonly ILogger<BooksController> _logger;
 
-    public BooksController(IBooksService booksService)
+    public BooksController(IBooksService booksService, ILogger<BooksController> logger)
     {
             _service = booksService ?? throw new ArgumentNullException(nameof(booksService));
+            _logger = logger;
     }
 
     [HttpGet]
-    [EndpointSummary("Paged Book Inforation")]
+    [EndpointSummary("Paged Book Information")]
     [EndpointDescription("This returns all the books from our SQLite database, using EF Core")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IReadOnlyCollection<BookDTO>))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -25,6 +27,8 @@ public class BooksController : ControllerBase
     {
         try
         {
+            await Task.Delay(5000);
+
             var pagedResult = await _service.GetBooksAsync(pageSize, lastId, Url);
 
             var paginationMetadata = new
@@ -33,7 +37,7 @@ public class BooksController : ControllerBase
                 pagedResult.HasPreviousPage,
                 pagedResult.HasNextPage,
                 pagedResult.PreviousPageUrl,
-                pagedResult.NextPageUrl
+                pagedResult.NextPageUrl,
             };
 
             var options = new JsonSerializerOptions
@@ -72,7 +76,6 @@ public class BooksController : ControllerBase
                 return NotFound();
             }
 
-
             return Ok(book);
         }
         catch (Exception)
@@ -95,6 +98,11 @@ public class BooksController : ControllerBase
         try
         {
             var createdBook = await _service.CreateBookAsync(bookDto);
+
+            Response.Headers.CacheControl = "no-store";
+
+            Response.Headers.Append("X-Books-Modified", "true");
+
             return CreatedAtAction(nameof(GetBookById), new { id = createdBook.Id }, createdBook);
         }
         catch (Exception)

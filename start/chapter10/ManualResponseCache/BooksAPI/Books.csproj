@@ -28,7 +28,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\BooksAPI.AppHost\BooksAPI.AppHost.csproj" />
+      <ProjectReference Include="..\BooksAPI.ServiceDefaults\BooksAPI.ServiceDefaults.csproj" />
     </ItemGroup>
 
 </Project>

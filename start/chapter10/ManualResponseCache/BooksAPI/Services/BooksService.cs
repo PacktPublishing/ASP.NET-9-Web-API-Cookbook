@@ -73,7 +73,9 @@ public class BooksService : IBooksService
             Genre = bookDTO.Genre,
             Summary = bookDTO.Summary
         };
+
         var result = await _repository.CreateBookAsync(book);
+
         return new BookDTO
         {
             Id = result.Id,
@@ -104,5 +106,5 @@ public class BooksService : IBooksService
                 Genre = b.Genre,             
                 Summary = b.Summary         
              });
-           }
+   }
 }
