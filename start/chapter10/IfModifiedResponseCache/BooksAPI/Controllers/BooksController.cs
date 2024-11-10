@@ -46,7 +46,6 @@ public class BooksController : ControllerBase
             };
 
             Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(paginationMetadata, options));
-            Response.Headers.CacheControl = "max-age=60, private";
 
             return Ok(pagedResult.Items);
         }

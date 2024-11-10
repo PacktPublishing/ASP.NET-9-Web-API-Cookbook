@@ -32,6 +32,7 @@ public class Program
             options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
         builder.Services.AddScoped<IBooksRepository, BooksRepository>();
         builder.Services.AddScoped<IBooksService, BooksService>();
+        builder.Services.AddSingleton<IModificationTracker, ModificationTracker>();
 
         var app = builder.Build();
 

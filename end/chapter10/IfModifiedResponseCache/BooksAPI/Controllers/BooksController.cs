@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Books.Services;
 using Books.Models;
 using System.Text.Json;
+using System.Diagnostics;
 
 namespace Books.Controllers;
 
@@ -22,11 +23,51 @@ public class BooksController : ControllerBase
     [EndpointSummary("Paged Book Information")]
     [EndpointDescription("This returns all the books from our SQLite database, using EF Core")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IReadOnlyCollection<BookDTO>))]
+    [ProducesResponseType(StatusCodes.Status304NotModified)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetBooks([FromQuery] int pageSize = 10, [FromQuery] int lastId = 0)
     {
         try
         {
+            var lastModified = await _service.GetLastModificationTimeAsync();
+            Response.Headers.LastModified = lastModified?.ToString("R");
+            Response.Headers.CacheControl = "no-cache, private";
+            Response.Headers.Vary = "Accept, Accept-Encoding, Query";
+
+            if (Request.Headers.IfModifiedSince.Count > 0 && lastModified.HasValue)
+            {
+               var ifModifiedSince = Request.GetTypedHeaders().IfModifiedSince?.UtcDateTime.ToUniversalTime();
+               var lastModifiedUtc = lastModified.Value.ToUniversalTime();
+
+               if (ifModifiedSince.HasValue)
+               {
+                   var ifModifiedSinceRounded = new DateTime(
+                       ifModifiedSince.Value.Year,
+                       ifModifiedSince.Value.Month,
+                       ifModifiedSince.Value.Day,
+                       ifModifiedSince.Value.Hour,
+                       ifModifiedSince.Value.Minute,
+                       ifModifiedSince.Value.Second,
+                       DateTimeKind.Utc);
+
+                   var lastModifiedRounded = new DateTime(
+                       lastModifiedUtc.Year,
+                       lastModifiedUtc.Month,
+                       lastModifiedUtc.Day,
+                       lastModifiedUtc.Hour,
+                       lastModifiedUtc.Minute,
+                       lastModifiedUtc.Second,
+                       DateTimeKind.Utc);
+
+                   var comparison = DateTime.Compare(lastModifiedRounded, ifModifiedSinceRounded);
+
+                   if (comparison <= 0)
+                   {
+                       return StatusCode(StatusCodes.Status304NotModified);
+                   }
+               }
+            }
+                    
             await Task.Delay(5000);
 
             var pagedResult = await _service.GetBooksAsync(pageSize, lastId, Url);
@@ -46,7 +87,6 @@ public class BooksController : ControllerBase
             };
 
             Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(paginationMetadata, options));
-            Response.Headers.CacheControl = "max-age=60, private";
 
             return Ok(pagedResult.Items);
         }

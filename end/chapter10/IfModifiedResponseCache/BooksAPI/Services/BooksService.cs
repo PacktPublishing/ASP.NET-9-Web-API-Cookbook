@@ -7,10 +7,17 @@ namespace Books.Services;
 public class BooksService : IBooksService
 {
     private readonly IBooksRepository _repository;
+    private readonly IModificationTracker _tracker;
 
-    public BooksService(IBooksRepository repository)
+    public BooksService(IBooksRepository repository, IModificationTracker tracker)
     {
         _repository = repository;
+        _tracker = tracker;
+    }
+
+    public Task<DateTime?> GetLastModificationTimeAsync()
+    {
+        return Task.FromResult(_tracker.LastModified);
     }
 
     public async Task<PagedResult<BookDTO>> GetBooksAsync(int pageSize, int lastId, IUrlHelper urlHelper)
@@ -76,6 +83,8 @@ public class BooksService : IBooksService
 
         var result = await _repository.CreateBookAsync(book);
 
+        _tracker.SetModified();
+
         return new BookDTO
         {
             Id = result.Id,
@@ -106,5 +115,5 @@ public class BooksService : IBooksService
                 Genre = b.Genre,             
                 Summary = b.Summary         
              });
-   }
+           }
 }

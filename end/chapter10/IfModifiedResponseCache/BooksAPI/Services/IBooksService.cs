@@ -10,4 +10,5 @@ public interface IBooksService
     Task<BookDTO> CreateBookAsync(BookDTO bookDTO);
     Task<bool> BookExistsAsync(string isbn);
     IQueryable<BookDTO> GetBooks();
+    Task<DateTime?> GetLastModificationTimeAsync();
 }
