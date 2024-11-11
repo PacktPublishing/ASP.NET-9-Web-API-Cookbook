@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Books API Cache Demonstration</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .header {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            padding: 10px;
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .button:disabled {
+            background-color: #93c5fd;
+            cursor: not-allowed;
+        }
+
+        .button.add {
+            background-color: #059669;
+        }
+
+        .stats-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .request-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .info-card {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 4px;
+        }
+
+        .cache-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .cache-hit {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+
+        .cache-miss {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        .headers {
+            background-color: #f8fafc;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+        }
+
+        .header-cache {
+            color: #0891b2;
+            font-weight: 600;
+            padding: 2px 0;
+        }
+
+        .header-pagination {
+            color: #0891b2;
+            font-weight: 600;
+            padding: 2px 0;
+        }
+
+        .header-modification {
+            color: #15803d;
+            font-weight: 600;
+            padding: 2px 0;
+        }
+
+        .headers-section {
+            margin-bottom: 10px;
+            padding: 5px;
+            border-left: 3px solid transparent;
+        }
+
+        .headers-section.caching {
+            border-left-color: #0891b2;
+            background-color: #ecfeff;
+        }
+
+        .headers-section.standard {
+            border-left-color: #64748b;
+            background-color: #f8fafc;
+        }
+
+        .headers-section.pagination {
+            border-left-color: #0891b2;
+            background-color: #ecfeff;
+        }
+
+        .headers-section.modification {
+            border-left-color: #15803d;
+            background-color: #f0fdf4;
+        }
+
+        .no-headers {
+            color: #64748b;
+            font-style: italic;
+        }
+
+        #results {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: auto;
+            max-height: 400px;
+        }
+
+        pre {
+            margin: 0;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Books API Cache Demonstration</h1>
+    </div>
+
+    <div class="actions">
+        <button class="button" onclick="fetchWithCache()" id="fetchCached">
+            <i data-lucide="book-open"></i>
+            Fetch Books (Cacheable)
+        </button>
+        <button class="button" onclick="fetchWithoutCache()" id="fetchUncached">
+            <i data-lucide="refresh-cw"></i>
+            Fetch Books (No Cache)
+        </button>
+        <button class="button add" onclick="addNewBook()" id="addBook">
+            <i data-lucide="plus"></i>
+            Add New Book
+        </button>
+    </div>
+
+    <div class="stats-panel">
+        <div id="requestInfo" class="request-info"></div>
+        <div id="headers" class="headers"></div>
+    </div>
+
+    <div id="results"></div>
+
+    <script>
+        let lastRequestTime = {};
+        let requestStats = {
+            cached: { hits: 0, misses: 0 },
+            uncached: { hits: 0, misses: 0 }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const { createIcons } = lucide;
+            createIcons();
+
+            function formatHeaders(headers, isPost = false) {
+                const headerGroups = {
+                    caching: [],
+                    standard: [],
+                    pagination: [],
+                    modification: []
+                };
+
+                const cachingHeaders = [
+                    'cache-control',
+                    'etag',
+                    'expires',
+                    'last-modified',
+                    'pragma'
+                ];
+
+                headers.forEach((value, key) => {
+                    const header = `${key}: ${value}`;
+                    const lowerKey = key.toLowerCase();
+
+                    if (cachingHeaders.includes(lowerKey)) {
+                        headerGroups.caching.push(
+                            `<div class="header-cache">${header}</div>`
+                        );
+                    } else if (lowerKey === 'x-pagination') {
+                        headerGroups.pagination.push(
+                            `<div class="header-pagination">${header}</div>`
+                        );
+                    } else if (lowerKey === 'x-books-modified') {
+                        headerGroups.modification.push(
+                            `<div class="header-modification">${header}</div>`
+                        );
+                    } else {
+                        headerGroups.standard.push(`<div>${header}</div>`);
+                    }
+                });
+
+                let output = '';
+                
+                if (isPost) {
+                    output = `
+                        <div class="headers-section modification">
+                            <strong>Modification Headers:</strong>
+                            ${headerGroups.modification.join('\n') || '<div class="no-headers">No modification headers present</div>'}
+                        </div>
+                        <div class="headers-section caching">
+                            <strong>Caching Headers:</strong>
+                            ${headerGroups.caching.join('\n') || '<div class="no-headers">No caching headers present</div>'}
+                        </div>
+                    `;
+                } else {
+                    output = `
+                        <div class="headers-section caching">
+                            <strong>Caching Headers:</strong>
+                            ${headerGroups.caching.join('\n') || '<div class="no-headers">No caching headers present</div>'}
+                        </div>
+                        <div class="headers-section pagination">
+                            <strong>Pagination Headers:</strong>
+                            ${headerGroups.pagination.join('\n') || '<div class="no-headers">No pagination headers present</div>'}
+                        </div>
+                    `;
+                }
+
+                output += `
+                    <div class="headers-section standard">
+                        <strong>Standard Headers:</strong>
+                        ${headerGroups.standard.join('\n')}
+                    </div>
+                `;
+
+                return output;
+            }
+
+            window.disableButtons = function(disabled) {
+                document.querySelectorAll('.button').forEach(btn => btn.disabled = disabled);
+            }
+
+            window.updateRequestInfo = function(type, timing, response, fromCache, isPost = false) {
+                const now = new Date();
+                const timeSinceLastRequest = lastRequestTime[type] 
+                    ? (now - lastRequestTime[type]) / 1000 
+                    : null;
+                
+                if (!isPost) {
+        if (fromCache) {
+            requestStats[type].hits++;
+        } else {
+            requestStats[type].misses++;
+        }
+    }
+
+    const cacheStatus = isPost ? 'N/A' : (fromCache ? 'HIT' : 'MISS');
+    const cacheClass = isPost ? '' : (fromCache ? 'cache-hit' : 'cache-miss');
+    const icon = isPost ? 'plus' : (fromCache ? 'database' : 'server');
+
+    document.getElementById('requestInfo').innerHTML = `
+        <div class="info-card">
+            ${!isPost ? `
+                <div class="cache-indicator ${cacheClass}">
+                    <i data-lucide="${icon}"></i>
+                    Cache ${cacheStatus}
+                </div>
+            ` : ''}
+            <p>Request Time: ${timing.toFixed(2)}ms</p>
+            <p>Status: ${response.status}</p>
+            ${timeSinceLastRequest ? `<p>Time Since Last Request: ${timeSinceLastRequest.toFixed(1)}s</p>` : ''}
+            ${!isPost ? `<p>Cache Stats (${type}): ${requestStats[type].hits} hits, ${requestStats[type].misses} misses</p>` : ''}
+        </div>
+    `;
+
+                document.getElementById('headers').innerHTML = 
+                    `Response Headers:\n${formatHeaders(response.headers, isPost)}`;
+                
+                lastRequestTime[type] = now;
+                createIcons();
+            }
+
+            window.fetchWithCache = async function() {
+                disableButtons(true);
+                // Clear headers and request info immediately
+                document.getElementById('headers').innerHTML = "";
+                document.getElementById('requestInfo').innerHTML = "";
+
+                const startTime = performance.now();
+                try {
+                    const response = await fetch('https://localhost:5011/api/books?pageSize=10&lastId=0', {
+                        headers: { 'Accept': 'application/json' }
+                    });
+                    
+                    const data = await response.json();
+                    const timing = performance.now() - startTime;
+                    
+                    const fromCache = timing < 100;
+                    updateRequestInfo('cached', timing, response, fromCache, false);
+                    
+                    document.getElementById('results').innerHTML = 
+                        `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+                } catch (error) {
+                    document.getElementById('results').innerHTML = 
+                        `<pre style="color: red">Error: ${error.message}</pre>`;
+                } finally {
+                    disableButtons(false);
+                    createIcons();
+                }
+            }
+
+            window.fetchWithoutCache = async function() {
+                disableButtons(true);
+                // Clear headers and request info immediately
+                document.getElementById('headers').innerHTML = "";
+                document.getElementById('requestInfo').innerHTML = "";
+
+                const startTime = performance.now();
+                try {
+                    const response = await fetch('https://localhost:5011/api/books?pageSize=10&lastId=0', {
+                        headers: { 'Accept': 'application/json' },
+                        cache: 'no-store'
+                    });
+                    
+                    const data = await response.json();
+                    const timing = performance.now() - startTime;
+                    
+                    updateRequestInfo('uncached', timing, response, false, false);
+                    
+                    document.getElementById('results').innerHTML = 
+                        `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+                } catch (error) {
+                    document.getElementById('results').innerHTML = 
+                        `<pre style="color: red">Error: ${error.message}</pre>`;
+                } finally {
+                    disableButtons(false);
+                    createIcons();
+                }
+            }
+
+            window.addNewBook = async function() {
+                disableButtons(true);
+
+                document.getElementById('headers').innerHTML = "";
+                document.getElementById('requestInfo').innerHTML = "";
+
+                const startTime = performance.now();
+                try {
+                    const newBook = {
+                        title: "Test Book " + new Date().toISOString(),
+                        author: "Test Author",
+                        publicationDate: new Date().toISOString().split('T')[0],
+                        isbn: "978-" + Math.random().toString().slice(2, 10),
+                        genre: "Fiction",
+                        summary: "A test book for cache invalidation testing"
+                    };
+
+                    const response = await fetch('https://localhost:5011/api/books', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(newBook)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    const timing = performance.now() - startTime;
+                    updateRequestInfo('post', timing, response, false, true);
+                    
+                    document.getElementById('results').innerHTML = 
+                        `<pre style="color: green">Successfully added new book:\n${JSON.stringify(result, null, 2)}</pre>`;
+                } catch (error) {
+                    document.getElementById('results').innerHTML = 
+                        `<pre style="color: red">Error: ${error.message}</pre>`;
+                } finally {
+                    disableButtons(false);
+                    createIcons();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

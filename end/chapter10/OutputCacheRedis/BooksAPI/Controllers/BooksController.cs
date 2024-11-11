@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.OutputCaching; 
 using Microsoft.AspNetCore.Mvc;
 using Books.Services;
 using Books.Models;
@@ -23,6 +24,7 @@ public class BooksController : ControllerBase
     [EndpointDescription("This returns all the books from our SQLite database, using EF Core")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IReadOnlyCollection<BookDTO>))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [OutputCache(Duration = 60, Tags = new[] { "GetBooks" })]
     public async Task<IActionResult> GetBooks([FromQuery] int pageSize = 10, [FromQuery] int lastId = 0)
     {
         try
@@ -99,6 +101,8 @@ public class BooksController : ControllerBase
         {
             var createdBook = await _service.CreateBookAsync(bookDto);
 
+            var outputCache = HttpContext.RequestServices.GetRequiredService<IOutputCacheStore>();
+	    	await outputCache.EvictByTagAsync("GetBooks", HttpContext.RequestAborted);
             Response.Headers.Append("X-Books-Modified", "true");
 
             return CreatedAtAction(nameof(GetBookById), new { id = createdBook.Id }, createdBook);

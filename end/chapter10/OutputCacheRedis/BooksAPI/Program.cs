@@ -3,7 +3,7 @@ using Books.Data;
 using Books.Services;
 using Books.Repositories;
 
-namespace Books.Api;
+namespace NorthAmerica.Api;
 
 public class Program
 {
@@ -11,6 +11,7 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.AddRedisOutputCache(connectionName: "cache");
         builder.AddServiceDefaults();
 
         builder.Services.AddCors(options =>
@@ -37,6 +38,7 @@ public class Program
 
         app.UseCors();
         app.UseRouting();
+        app.UseOutputCache();
         app.UseWebSockets();
         app.MapControllers();
 
