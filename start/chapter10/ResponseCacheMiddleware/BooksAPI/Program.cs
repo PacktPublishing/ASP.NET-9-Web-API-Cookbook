@@ -21,7 +21,7 @@ public class Program
                 builder.AllowAnyOrigin()
                 .AllowAnyHeader()
                 .AllowAnyMethod()
-                .WithExposedHeaders("x-Pagination", "X-Books-Modified"); 
+                .WithExposedHeaders("X-Pagination", "X-Books-Modified"); 
             });
         });
 

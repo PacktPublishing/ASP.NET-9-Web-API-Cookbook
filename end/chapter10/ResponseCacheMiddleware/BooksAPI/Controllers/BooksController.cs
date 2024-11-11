@@ -48,10 +48,6 @@ public class BooksController : ControllerBase
                etag = $"\"{Guid.NewGuid():n}\"";
                _cache.Set("BooksETag", etag, cacheOptions);
             }
-            else
-            {
-                _logger.LogInformation("Using cached ETag: {ETag}", etag);
-            } 
 
             if (Request.Headers.IfNoneMatch.Count > 0)
             {
@@ -66,8 +62,6 @@ public class BooksController : ControllerBase
 
             var pagedResult = await _service.GetBooksAsync(pageSize, lastId, Url);
 
-            Response.GetTypedHeaders().ETag = new EntityTagHeaderValue(etag);
-          
             var paginationMetadata = new
             {
                 pagedResult.PageSize,
@@ -83,6 +77,7 @@ public class BooksController : ControllerBase
             };
 
             Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(paginationMetadata, options));
+            Response.GetTypedHeaders().ETag = new EntityTagHeaderValue(etag);
 
             return Ok(pagedResult.Items);
         }

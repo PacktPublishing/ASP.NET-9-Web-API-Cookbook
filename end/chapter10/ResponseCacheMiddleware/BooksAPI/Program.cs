@@ -23,7 +23,7 @@ public class Program
                 builder.AllowAnyOrigin()
                 .AllowAnyHeader()
                 .AllowAnyMethod()
-                .WithExposedHeaders("x-Pagination", "ETag"); 
+                .WithExposedHeaders("X-Pagination", "X-Books-Modified", "ETag"); 
             });
         });
 
