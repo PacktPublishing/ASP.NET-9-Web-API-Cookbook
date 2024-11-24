@@ -12,7 +12,7 @@ var inventory = builder.AddProject<Projects.InventoryService>("inventory")
         }
     );
 
-var books = builder.AddProject<Projects.Books>("books")
+var books = builder.AddProject<Projects.BooksAPI>("books")
     .WithReference(inventory)
     .WithHttpEndpoint(
         name: "api",
