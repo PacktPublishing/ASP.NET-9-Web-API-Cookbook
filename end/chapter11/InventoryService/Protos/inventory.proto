@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+option csharp_namespace = "InventoryService.Grpc";  // Changed namespace
+
+service Inventory {
+    rpc InitializeInventory (InitializeInventoryRequest) returns (InitializeInventoryResponse);
+    
+    rpc MonitorStock (StockRequest) returns (stream StockUpdate);
+}
+
+message InitializeInventoryRequest {
+    int32 book_id = 1;
+    string isbn = 2;
+    int32 initial_stock = 3;
+}
+
+message InitializeInventoryResponse {
+    bool success = 1;
+    string inventory_id = 2;
+}
+
+message StockRequest {
+    int32 book_id = 1;
+}
+
+message StockUpdate {
+    int32 current_stock = 1;
+    string location = 2;
+    int64 timestamp = 3;
+}
