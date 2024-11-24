@@ -25,8 +25,6 @@ public class Program
 
         builder.Services.AddControllers();
 
-        //builder.Services.AddGrpcClient<Inventory.InventoryClient>();
-        // In BooksAPI/Program.cs
         builder.Services.AddGrpcClient<Inventory.InventoryClient>(options =>
         {
             options.Address = new Uri("http://localhost:5003");
