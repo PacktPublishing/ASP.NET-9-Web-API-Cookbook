@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "hzWceZbaaSY=",
+  "dgSpecHash": "Oq0ZA5aCgKE=",
   "success": true,
   "projectFilePath": "C:\\my-coding-projects\\officialPacktRepo\\ASP.NET-9-Web-API-Cookbook\\end\\chapter09\\KeyVault\\mapAPI.csproj",
   "expectedPackageFiles": [
@@ -11,7 +11,7 @@
     "C:\\Users\\laved\\.nuget\\packages\\azure.security.keyvault.certificates\\4.5.1\\azure.security.keyvault.certificates.4.5.1.nupkg.sha512",
     "C:\\Users\\laved\\.nuget\\packages\\azure.security.keyvault.keys\\4.5.0\\azure.security.keyvault.keys.4.5.0.nupkg.sha512",
     "C:\\Users\\laved\\.nuget\\packages\\azure.security.keyvault.secrets\\4.6.0\\azure.security.keyvault.secrets.4.6.0.nupkg.sha512",
-    "C:\\Users\\laved\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.0-rc.2.24474.3\\microsoft.aspnetcore.openapi.9.0.0-rc.2.24474.3.nupkg.sha512",
+    "C:\\Users\\laved\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.0\\microsoft.aspnetcore.openapi.9.0.0.nupkg.sha512",
     "C:\\Users\\laved\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\6.0.0\\microsoft.bcl.asyncinterfaces.6.0.0.nupkg.sha512",
     "C:\\Users\\laved\\.nuget\\packages\\microsoft.extensions.configuration\\2.1.0\\microsoft.extensions.configuration.2.1.0.nupkg.sha512",
     "C:\\Users\\laved\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\8.0.0\\microsoft.extensions.configuration.abstractions.8.0.0.nupkg.sha512",
