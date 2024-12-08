@@ -9,9 +9,9 @@
   <ItemGroup>
     <PackageReference Include="Bogus" Version="35.6.1" />
     <PackageReference Include="Dapper" Version="2.1.35" />
-    <PackageReference Include="HotChocolate.AspNetCore" Version="15.0.0-p.4" />
-    <PackageReference Include="HotChocolate.Data" Version="15.0.0-p.5" />
-    <PackageReference Include="HotChocolate.Subscriptions" Version="15.0.0-p.4" />
+    <PackageReference Include="HotChocolate.AspNetCore" Version="15.0.0-p.16" />
+    <PackageReference Include="HotChocolate.Data" Version="15.0.0-p.16" />
+    <PackageReference Include="HotChocolate.Subscriptions" Version="15.0.0-p.16" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.0" />
