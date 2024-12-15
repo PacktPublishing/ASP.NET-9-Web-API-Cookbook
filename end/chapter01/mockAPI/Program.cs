@@ -2,7 +2,6 @@ using mockAPI.Data;
 using mockAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.Sqlite;
-
 using Bogus;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,7 +31,6 @@ using (var scope = app.Services.CreateScope())
         context.Products.AddRange(products);
         context.SaveChanges();
     }
-
 } 
 
 app.MapGet("/products", async (AppDbContext db) =>

@@ -1,54 +1,50 @@
 using cookbook.Data;
 using cookbook.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.Sqlite;
 using Bogus;
 using cookbook.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+var connection = new SqliteConnection("DataSource=:memory:");
+connection.Open();
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddOpenApi();
 
-builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("InMemoryDb"));
-
+builder.Services.AddDbContext<AppDbContext>(options => 
+    options.UseSqlite(connection));
+    
 builder.Services.AddScoped<IProductsService, ProductReadService>();
 
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<AppDbContext>();
-
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     context.Database.EnsureCreated();
-
+    
     if (!context.Products.Any())
     {
         var productFaker = new Faker<Product>()
             .RuleFor(p => p.Name, f => f.Commerce.ProductName())
             .RuleFor(p => p.Price, f => f.Finance.Amount(50, 2000))
             .RuleFor(p => p.CategoryId, f => f.Random.Int(1, 5));
-
-        var products = productFaker.Generate(10000);
-
-        context.Products.AddRange(products);
+        context.Products.AddRange(productFaker.Generate(10000));
         context.SaveChanges();
     }
 }
 
-// Configure the HTTP request pipeline.
+app.MapControllers();
+app.MapOpenApi();
+
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/openapi/v1.json", "v1");
+    });
 }
-
-app.UseAuthorization();
-
-app.MapControllers();
 
 app.Run();
