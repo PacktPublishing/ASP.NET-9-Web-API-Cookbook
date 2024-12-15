@@ -6,11 +6,11 @@ using Microsoft.Data.Sqlite;
 using Bogus;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddOpenApi();
+
 var connection = new SqliteConnection("DataSource=:memory:");
 connection.Open();
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
    options.UseSqlite(connection));
@@ -38,6 +38,9 @@ using (var scope = app.Services.CreateScope())
 app.MapGet("/products", async (AppDbContext db) =>
     await db.Products.OrderBy(p => p.Id).Take(10).ToListAsync());
 
-app.UseSwagger();
-app.UseSwaggerUI();
+app.MapOpenApi();
+app.UseSwaggerUI(options =>
+{
+    options.SwaggerEndpoint("/openapi/v1.json", "v1");
+});
 app.Run();
