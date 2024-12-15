@@ -1,30 +1,27 @@
 using mockAPI.Data;
 using mockAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.Sqlite;
+
 using Bogus;
 
 var builder = WebApplication.CreateBuilder(args);
+var connection = new SqliteConnection("DataSource=:memory:");
+connection.Open();
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("InMemoryDb"));
+builder.Services.AddDbContext<AppDbContext>(options =>
+   options.UseSqlite(connection));
 
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<AppDbContext>();
-
-    // Create the database if it doesn't exist
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     context.Database.EnsureCreated();
 
-    // Check if there are any Products in the database
     if (!context.Products.Any())
     {
         var productFaker = new Faker<Product>()
@@ -35,18 +32,12 @@ using (var scope = app.Services.CreateScope())
         context.Products.AddRange(products);
         context.SaveChanges();
     }
+
 } 
 
+app.MapGet("/products", async (AppDbContext db) =>
+    await db.Products.OrderBy(p => p.Id).Take(10).ToListAsync());
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseAuthorization();
-
-app.MapControllers();
-
+app.UseSwagger();
+app.UseSwaggerUI();
 app.Run();
