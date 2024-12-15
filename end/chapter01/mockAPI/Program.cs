@@ -39,8 +39,10 @@ app.MapGet("/products", async (AppDbContext db) =>
     await db.Products.OrderBy(p => p.Id).Take(10).ToListAsync());
 
 app.MapOpenApi();
-app.UseSwaggerUI(options =>
-{
-    options.SwaggerEndpoint("/openapi/v1.json", "v1");
-});
+if (app.Environment.IsDevelopment()) {
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/openapi/v1.json", "v1");
+    });
+}
 app.Run();
