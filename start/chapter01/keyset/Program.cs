@@ -7,15 +7,11 @@ using cookbook.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Create and open a connection that will persist for the application lifetime
 var connection = new SqliteConnection("DataSource=:memory:");
 connection.Open();
 
-// Add services
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
-
-// Register DbContext with the shared connection
 builder.Services.AddDbContext<AppDbContext>(options => 
     options.UseSqlite(connection));
     
@@ -23,7 +19,6 @@ builder.Services.AddScoped<IProductsService, ProductReadService>();
 
 var app = builder.Build();
 
-// Initialize database
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
