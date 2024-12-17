@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using cookbook.Models;
+using aggregateBy.Models;
 
-namespace cookbook.Data;
+namespace aggregateBy.Data;
 
 public class AppDbContext : DbContext
 {

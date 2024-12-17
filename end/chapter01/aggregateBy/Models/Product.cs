@@ -1,4 +1,4 @@
-namespace cookbook.Models;
+namespace aggregateBy.Models;
 
 public class Product
 {

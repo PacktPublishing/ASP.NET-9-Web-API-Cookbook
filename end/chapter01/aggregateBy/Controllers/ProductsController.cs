@@ -1,23 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
-using cookbook.Models;
-using cookbook.Services;
+using aggregateBy.Models;
+using aggregateBy.Services;
 using System.Text.Json;
 
-namespace cookbook.Controllers;
+namespace aggregateBy.Controllers;
 
 [Route("[controller]")]
 [ApiController]
-public class ProductsController : ControllerBase
+public class ProductsController(IProductReadService productReadService, ILogger<ProductsController> logger) : ControllerBase
 {
-	private readonly IProductsService _productsService;
-	private readonly ILogger<ProductsController> _logger; 
-
-    public ProductsController(IProductsService productsService, ILogger<ProductsController> logger)
-    {
-        _productsService = productsService;
-        _logger = logger;
-    }
-
     // GET: /Products/AllAtOnce
     [HttpGet("AllAtOnce")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ProductDTO>))] 
@@ -25,11 +16,11 @@ public class ProductsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<ProductDTO>>> GetAllProducts()
         {
-            _logger.LogInformation("Retrieving all products");
+            logger.LogInformation("Retrieving all products");
 
             try 
             {
-                var products = await _productsService.GetAllProductsAsync();
+                var products = await productReadService.GetAllProductsAsync();
 
                 if (!products.Any())
                     return NoContent();
@@ -38,7 +29,7 @@ public class ProductsController : ControllerBase
             } 
             catch (Exception ex) 
             {
-                _logger.LogError(ex, "An error occurred while retrieving all products");
+                logger.LogError(ex, "An error occurred while retrieving all products");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
@@ -56,7 +47,7 @@ public class ProductsController : ControllerBase
             return BadRequest("pageSize must be greater than 0");
         }
 
-        var pagedResult = await _productsService.GetPagedProductsAsync(pageSize, lastProductId);
+        var pagedResult = await productReadService.GetPagedProductsAsync(pageSize, lastProductId);
 
         var previousPageUrl = pagedResult.HasPreviousPage
                 ? Url.Action("GetProducts", new { pageSize, lastProductId = pagedResult.Items.First().Id })
