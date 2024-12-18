@@ -1,22 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
-using cookbook.Models;
-using cookbook.Services;
+using CountBy.Models;
+using CountBy.Services;
 
-namespace cookbook.Controllers;
+namespace CountBy.Controllers;
 
 [Route("[controller]")]
 [ApiController]
-public class ProductsController : ControllerBase
+public class ProductsController(IProductReadService productReadService, ILogger<ProductsController> logger) : ControllerBase
 {
-	private readonly IProductsService _productsService;
-	private readonly ILogger<ProductsController> _logger; 
-
-    public ProductsController(IProductsService productsService, ILogger<ProductsController> logger)
-    {
-        _productsService = productsService;
-        _logger = logger;
-    }
-
     // GET: /Products
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ProductDTO>))] 
@@ -24,11 +15,11 @@ public class ProductsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<ProductDTO>>> GetAllProducts()
         {
-            _logger.LogInformation("Retrieving all products");
+            logger.LogInformation("Retrieving all products");
 
             try 
             {
-                var products = await _productsService.GetAllProductsAsync();
+                var products = await productReadService.GetAllProductsAsync();
 
                 if (!products.Any())
                     return NoContent();
@@ -37,7 +28,7 @@ public class ProductsController : ControllerBase
             } 
             catch (Exception ex) 
             {
-                _logger.LogError(ex, "An error occurred while retrieving all products");
+                logger.LogError(ex, "An error occurred while retrieving all products");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
@@ -46,11 +37,11 @@ public class ProductsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<ProductDTO>> GetAProduct(int id)
     {
-        _logger.LogInformation($"Retrieving product with id {id}");
+        logger.LogInformation($"Retrieving product with id {id}");
 
         try 
         {
-            var product = await _productsService.GetAProductAsync(id);
+            var product = await productReadService.GetAProductAsync(id);
 
             if (product == null)
                 return NotFound();
@@ -59,7 +50,7 @@ public class ProductsController : ControllerBase
         } 
         catch (Exception ex) 
         {
-            _logger.LogError(ex, $"An error occurred while retrieving product with id {id}");
+            logger.LogError(ex, $"An error occurred while retrieving product with id {id}");
             return StatusCode(StatusCodes.Status500InternalServerError);
         }
     }

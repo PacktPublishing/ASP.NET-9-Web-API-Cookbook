@@ -1,9 +1,9 @@
-using cookbook.Data;
-using cookbook.Models;
+using CountBy.Data;
+using CountBy.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.Sqlite;
 using Bogus;
-using cookbook.Services;
+using CountBy.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +15,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddDbContext<AppDbContext>(options => 
     options.UseSqlite(connection));
     
-builder.Services.AddScoped<IProductsService, ProductReadService>();
+builder.Services.AddScoped<IProductReadService, ProductReadService>();
 
 var app = builder.Build();
 

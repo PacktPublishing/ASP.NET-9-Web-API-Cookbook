@@ -1,22 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
-using cookbook.Models;
-using cookbook.Services;
+using CountBy.Models;
+using CountBy.Services;
 
-namespace cookbook.Controllers;
+namespace CountBy.Controllers;
 
 [Route("[controller]")]
 [ApiController]
-public class ProductsController : ControllerBase
+public class ProductsController(IProductReadService productsService, ILogger<ProductsController> logger)
+: ControllerBase
 {
-	private readonly IProductsService _productsService;
-	private readonly ILogger<ProductsController> _logger; 
-
-    public ProductsController(IProductsService productsService, ILogger<ProductsController> logger)
-    {
-        _productsService = productsService;
-        _logger = logger;
-    }
-
     // GET: /Products
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ProductDTO>))] 
@@ -24,11 +16,11 @@ public class ProductsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<IEnumerable<ProductDTO>>> GetAllProducts()
     {
-        _logger.LogInformation("Retrieving all products");
+        logger.LogInformation("Retrieving all products");
 
         try 
         {
-            var products = await _productsService.GetAllProductsAsync();
+            var products = await productsService.GetAllProductsAsync();
 
             if (!products.Any())
                 return NoContent();
@@ -37,7 +29,7 @@ public class ProductsController : ControllerBase
         } 
         catch (Exception ex) 
         {
-            _logger.LogError(ex, "An error occurred while retrieving all products");
+            logger.LogError(ex, "An error occurred while retrieving all products");
             return StatusCode(StatusCodes.Status500InternalServerError);
         }
     }
@@ -50,11 +42,11 @@ public class ProductsController : ControllerBase
 	[ResponseCache(Duration = 120, Location = ResponseCacheLocation.Any, NoStore = false)] 
 	public async Task<ActionResult<IEnumerable<CategoryDTO>>> GetCategoryInfo()
 	{
-		_logger.LogInformation("Retrieving Category Info");
+		logger.LogInformation("Retrieving Category Info");
 
 		try 
 		{
-			var products = await _productsService.GetCategoryInfoAsync();
+			var products = await productsService.GetCategoryInfoAsync();
 
 			if (!products.Any())
 				return NoContent();
@@ -63,7 +55,7 @@ public class ProductsController : ControllerBase
 		} 
 		catch (Exception ex) 
 		{
-			_logger.LogError(ex, "An error occurred while retrieving all products");
+			logger.LogError(ex, "An error occurred while retrieving all products");
 			return StatusCode(StatusCodes.Status500InternalServerError);
 		}
 	}

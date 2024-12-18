@@ -1,4 +1,4 @@
-namespace cookbook.Models;
+namespace CountBy.Models;
 
 public class Product
 {

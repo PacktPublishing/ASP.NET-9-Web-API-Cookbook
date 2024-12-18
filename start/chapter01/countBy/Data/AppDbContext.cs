@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using cookbook.Models;
+using CountBy.Models;
 
-namespace cookbook.Data;
+namespace CountBy.Data;
 
 public class AppDbContext : DbContext
 {

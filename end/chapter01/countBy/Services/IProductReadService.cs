@@ -1,7 +1,7 @@
-using cookbook.Models;
-namespace cookbook.Services;
+using CountBy.Models;
+namespace CountBy.Services;
 
-public interface IProductsService {
+public interface IProductReadService {
     Task<IEnumerable<ProductDTO>> GetAllProductsAsync();
     Task<IReadOnlyCollection<CategoryDTO>> GetCategoryInfoAsync();
 
