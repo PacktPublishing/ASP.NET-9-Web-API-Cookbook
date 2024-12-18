@@ -1,9 +1,9 @@
-using cookbook.Data;
-using cookbook.Models;
+using CORS.Data;
+using CORS.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.Sqlite;
 using Bogus;
-using cookbook.Services;
+using CORS.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

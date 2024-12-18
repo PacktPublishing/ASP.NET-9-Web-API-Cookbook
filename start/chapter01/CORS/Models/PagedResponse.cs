@@ -1,4 +1,4 @@
-namespace cookbook.Models;
+namespace CORS.Models;
 
 public abstract record PagedResponse<T>
 {

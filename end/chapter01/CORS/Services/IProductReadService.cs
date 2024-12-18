@@ -1,7 +1,7 @@
-using cookbook.Models;
-namespace cookbook.Services;
+using CORS.Models;
+namespace CORS.Services;
 
-public interface IProductsService {
+public interface IProductReadService {
     Task<IEnumerable<ProductDTO>> GetAllProductsAsync();
     Task<PagedProductResponseDTO> GetPagedProductsAsync(int pageSize, int? lastProductId = null);
 }

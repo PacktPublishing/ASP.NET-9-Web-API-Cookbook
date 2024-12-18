@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using cookbook.Models;
+using CORS.Models;
 
-namespace cookbook.Data;
+namespace CORS.Data;
 
 public class AppDbContext : DbContext
 {
