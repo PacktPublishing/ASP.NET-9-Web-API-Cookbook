@@ -1,4 +1,4 @@
-namespace cookbook.Models;
+namespace FirstLastPage.Models;
 
 public abstract record PagedResponse<T>
 {

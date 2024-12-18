@@ -1,20 +1,13 @@
-using cookbook.Data;
-using cookbook.Models;
-using cookbook.Services;
+using FirstLastPage.Data;
+using FirstLastPage.Models;
+using FirstLastPage.Services;
 using Microsoft.EntityFrameworkCore;
 
-public class ProductReadService : IProductsService
+public class ProductReadService(AppDbContext context) : IProductReadService
 {
-    private readonly AppDbContext _context;
-
-    public ProductReadService(AppDbContext context)
-    {
-        _context = context;
-    }
-
     public async Task<IEnumerable<ProductDTO>> GetAllProductsAsync()
     {
-        return await _context.Products
+        return await context.Products
             .AsNoTracking()
             .Select(p => new ProductDTO
             {
@@ -28,7 +21,7 @@ public class ProductReadService : IProductsService
 
      public async Task<PagedProductResponseDTO> GetPagedProductsAsync(int pageSize, int? lastProductId = null)
     {
-        var query = _context.Products.AsQueryable();
+        var query = context.Products.AsQueryable();
 
         if (lastProductId.HasValue)
         {
@@ -48,7 +41,7 @@ public class ProductReadService : IProductsService
             .ToListAsync();
 
         var lastId = pagedProducts.LastOrDefault()?.Id;
-        var hasNextPage = await _context.Products.AnyAsync(p => p.Id > lastId);
+        var hasNextPage = await context.Products.AnyAsync(p => p.Id > lastId);
 
         var result = new PagedProductResponseDTO
         {

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using cookbook.Models;
+using FirstLastPage.Models;
 
-namespace cookbook.Data;
+namespace FirstLastPage.Data;
 
 public class AppDbContext : DbContext
 {

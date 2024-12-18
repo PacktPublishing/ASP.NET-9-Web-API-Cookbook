@@ -1,47 +1,38 @@
 using Microsoft.AspNetCore.Mvc;
-using cookbook.Models;
-using cookbook.Services;
+using FirstLastPage.Models;
+using FirstLastPage.Services;
 using System.Text.Json;
 
-namespace cookbook.Controllers;
+namespace FirstLastPage.Controllers;
 
 [Route("[controller]")]
 [ApiController]
-public class ProductsController : ControllerBase
+public class ProductsController(IProductReadService productReadService, ILogger<ProductsController> logger) : ControllerBase
 {
-	private readonly IProductsService _productsService;
-	private readonly ILogger<ProductsController> _logger; 
-
-    public ProductsController(IProductsService productsService, ILogger<ProductsController> logger)
-    {
-        _productsService = productsService;
-        _logger = logger;
-    }
-
     // GET: /Products/AllAtOnce
     [HttpGet("AllAtOnce")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ProductDTO>))] 
     [ProducesResponseType(StatusCodes.Status204NoContent)] 
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetAllProducts()
+    public async Task<ActionResult<IEnumerable<ProductDTO>>> GetAllProducts()
+    {
+        logger.LogInformation("Retrieving all products");
+
+        try 
         {
-            _logger.LogInformation("Retrieving all products");
+            var products = await productReadService.GetAllProductsAsync();
 
-            try 
-            {
-                var products = await _productsService.GetAllProductsAsync();
+            if (!products.Any())
+                return NoContent();
 
-                if (!products.Any())
-                    return NoContent();
-
-                return Ok(products);
-            } 
-            catch (Exception ex) 
-            {
-                _logger.LogError(ex, "An error occurred while retrieving all products");
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            return Ok(products);
+        } 
+        catch (Exception ex) 
+        {
+            logger.LogError(ex, "An error occurred while retrieving all products");
+            return StatusCode(StatusCodes.Status500InternalServerError);
         }
+    }
 
     // GET: /Products
     [HttpGet]
@@ -56,7 +47,7 @@ public class ProductsController : ControllerBase
             return BadRequest("pageSize must be greater than 0");
         }
 
-        var pagedResult = await _productsService.GetPagedProductsAsync(pageSize, lastProductId);
+        var pagedResult = await productReadService.GetPagedProductsAsync(pageSize, lastProductId);
 
         var previousPageUrl = pagedResult.HasPreviousPage
                 ? Url.Action("GetProducts", new { pageSize, lastProductId = pagedResult.Items.First().Id })
@@ -84,6 +75,4 @@ public class ProductsController : ControllerBase
 
         return Ok(pagedResult.Items);
     }
-
- 
 }

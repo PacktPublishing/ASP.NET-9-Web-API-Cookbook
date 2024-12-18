@@ -1,7 +1,7 @@
-using cookbook.Models;
-namespace cookbook.Services;
+using FirstLastPage.Models;
+namespace FirstLastPage.Services;
 
-public interface IProductsService {
+public interface IProductReadService {
     Task<IEnumerable<ProductDTO>> GetAllProductsAsync();
     Task<PagedProductResponseDTO> GetPagedProductsAsync(int pageSize, int? lastProductId = null);
 }

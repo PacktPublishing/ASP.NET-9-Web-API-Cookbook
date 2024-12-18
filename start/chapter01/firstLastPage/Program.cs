@@ -1,9 +1,9 @@
-using cookbook.Data;
-using cookbook.Models;
+using FirstLastPage.Data;
+using FirstLastPage.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.Sqlite;
 using Bogus;
-using cookbook.Services;
+using FirstLastPage.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +15,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddDbContext<AppDbContext>(options => 
     options.UseSqlite(connection));
     
-builder.Services.AddScoped<IProductsService, ProductReadService>();
+builder.Services.AddScoped<IProductReadService, ProductReadService>();
 
 builder.Services.AddCors(options => 
 {
