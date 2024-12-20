@@ -21,7 +21,7 @@ public class ProductReadService(AppDbContext context) : IProductReadService
 
      public async Task<PagedProductResponseDTO> GetPagedProductsAsync(int pageSize, int? lastProductId = null)
     {
-        var query = context.Products.AsQueryable();
+        var query = context.Products.AsNoTracking().AsQueryable();
 
         if (lastProductId.HasValue)
         {
