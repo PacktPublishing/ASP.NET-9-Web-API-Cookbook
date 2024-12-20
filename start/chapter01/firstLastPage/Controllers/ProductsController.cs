@@ -39,7 +39,6 @@ public class ProductsController(IProductReadService productReadService, ILogger<
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ProductDTO>))]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ResponseCache(Duration = 120, Location = ResponseCacheLocation.Any, NoStore = false)]
     public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProducts(int pageSize, int? lastProductId = null)
     {
         if (pageSize <= 0)
