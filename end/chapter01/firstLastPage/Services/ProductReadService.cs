@@ -25,84 +25,59 @@ public class ProductReadService(AppDbContext context, IMemoryCache cache) : IPro
     public async Task<PagedProductResponseDTO> GetPagedProductsAsync(int pageSize, int? lastProductId = null)
     {
         var totalPages = await GetTotalPagesAsync(pageSize);
+        List<Product> products;
+        bool hasNextPage;
+        bool hasPreviousPage;
 
         // First page request
         if (lastProductId == null)
         {
-            var firstPageProducts = new List<Product>();
+            products = new List<Product>();
             for (var i = 1; i <= pageSize; i++)
             {
                 var product = await context.Products.FindAsync(i);
                 if (product != null)
                 {
-                    firstPageProducts.Add(product);
+                    products.Add(product);
                 }
             }
-
-            return new PagedProductResponseDTO
-            {
-                Items = firstPageProducts.Select(p => new ProductDTO
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Price = p.Price,
-                    CategoryId = p.CategoryId
-                }).ToList(),
-                PageSize = pageSize,
-                HasPreviousPage = false,
-                HasNextPage = firstPageProducts.Count == pageSize,
-                TotalPages = totalPages
-            };
+            hasNextPage = products.Count == pageSize;
+            hasPreviousPage = false;
         }
-
         // Last page request
-        if (lastProductId == ((totalPages - 1) * pageSize))
+        else if (lastProductId == ((totalPages - 1) * pageSize))
         {
-            var lastPageProducts = new List<Product>();
+            products = new List<Product>();
             for (var i = lastProductId.Value; i < lastProductId.Value + pageSize; i++)
             {
                 var product = await context.Products.FindAsync(i);
                 if (product != null)
                 {
-                    lastPageProducts.Add(product);
+                    products.Add(product);
                 }
             }
-
-            return new PagedProductResponseDTO
-            {
-                Items = lastPageProducts.Select(p => new ProductDTO
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Price = p.Price,
-                    CategoryId = p.CategoryId
-                }).ToList(),
-                PageSize = pageSize,
-                HasPreviousPage = true,
-                HasNextPage = false,
-                TotalPages = totalPages
-            };
+            hasNextPage = false;
+            hasPreviousPage = true;
         }
-
         // Regular keyset pagination with tracking
-        IQueryable<Product> query = context.Products;
-        if (lastProductId.HasValue)
+        else
         {
+            IQueryable<Product> query = context.Products;
             query = query.Where(p => p.Id > lastProductId.Value);
+            products = await query
+                .OrderBy(p => p.Id)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var lastId = products.LastOrDefault()?.Id;
+            hasNextPage = lastId.HasValue && 
+                await context.Products.AnyAsync(p => p.Id > lastId);
+            hasPreviousPage = true;
         }
-
-        var pagedProducts = await query
-            .OrderBy(p => p.Id)
-            .Take(pageSize)
-            .ToListAsync();
-
-        var lastId = pagedProducts.LastOrDefault()?.Id;
-        var hasNextPage = lastId.HasValue && 
-            await context.Products.AnyAsync(p => p.Id > lastId);
 
         return new PagedProductResponseDTO
         {
-            Items = pagedProducts.Select(p => new ProductDTO
+            Items = products.Select(p => new ProductDTO
             {
                 Id = p.Id,
                 Name = p.Name,
@@ -110,7 +85,7 @@ public class ProductReadService(AppDbContext context, IMemoryCache cache) : IPro
                 CategoryId = p.CategoryId
             }).ToList(),
             PageSize = pageSize,
-            HasPreviousPage = lastProductId.HasValue,
+            HasPreviousPage = hasPreviousPage,
             HasNextPage = hasNextPage,
             TotalPages = totalPages
         };
