@@ -62,6 +62,7 @@ public class ProductReadService(AppDbContext context, IMemoryCache cache) : IPro
         // Regular keyset pagination with tracking
         else
         {
+            context.ChangeTracker.Clear();
             IQueryable<Product> query = context.Products;
             query = query.Where(p => p.Id > lastProductId.Value);
             products = await query
@@ -95,6 +96,7 @@ public class ProductReadService(AppDbContext context, IMemoryCache cache) : IPro
     {
         if (!cache.TryGetValue(TotalPagesKey, out int totalPages))
         {
+            context.ChangeTracker.Clear();
             var totalCount = await context.Products.CountAsync();
             totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
             cache.Set(TotalPagesKey, totalPages, TimeSpan.FromMinutes(2));
