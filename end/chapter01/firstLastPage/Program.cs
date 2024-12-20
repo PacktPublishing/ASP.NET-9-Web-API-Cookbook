@@ -12,6 +12,7 @@ connection.Open();
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
+builder.Services.AddMemoryCache();
 builder.Services.AddDbContext<AppDbContext>(options => 
     options.UseSqlite(connection));
     

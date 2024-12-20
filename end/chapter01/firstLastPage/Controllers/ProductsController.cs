@@ -7,38 +7,40 @@ namespace FirstLastPage.Controllers;
 
 [Route("[controller]")]
 [ApiController]
-public class ProductsController(IProductReadService productReadService, 
-        ILogger<ProductsController> logger) : ControllerBase
+public class ProductsController(
+    IProductReadService productReadService,
+    ILogger<ProductsController> logger) : ControllerBase
 {
     // GET: /Products/AllAtOnce
     [HttpGet("AllAtOnce")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ProductDTO>))] 
     [ProducesResponseType(StatusCodes.Status204NoContent)] 
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetAllProducts()
+    public async Task<ActionResult<IEnumerable<ProductDTO>>> GetAllProducts()
+    {
+        logger.LogInformation("Retrieving all products");
+
+        try 
         {
-            logger.LogInformation("Retrieving all products");
+            var products = await productReadService.GetAllProductsAsync();
 
-            try 
-            {
-                var products = await productReadService.GetAllProductsAsync();
+            if (!products.Any())
+                return NoContent();
 
-                if (!products.Any())
-                    return NoContent();
-
-                return Ok(products);
-            } 
-            catch (Exception ex) 
-            {
-                logger.LogError(ex, "An error occurred while retrieving all products");
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            return Ok(products);
+        } 
+        catch (Exception ex) 
+        {
+            logger.LogError(ex, "An error occurred while retrieving all products");
+            return StatusCode(StatusCodes.Status500InternalServerError);
         }
+    }
 
     // GET: /Products
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ProductDTO>))]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]  // Added for pageSize validation
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ResponseCache(Duration = 120, Location = ResponseCacheLocation.Any, NoStore = false)]
     public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProducts(int pageSize, int? lastProductId = null)
@@ -64,7 +66,10 @@ public class ProductsController(IProductReadService productReadService,
             HasPreviousPage = pagedResult.HasPreviousPage,
             HasNextPage = pagedResult.HasNextPage,
             PreviousPageUrl = previousPageUrl,
-            NextPageUrl = nextPageUrl
+            NextPageUrl = nextPageUrl,
+            FirstPageUrl = Url.Action("GetProducts", new { pageSize }),
+            LastPageUrl = Url.Action("GetProducts", new { pageSize, lastProductId = (pagedResult.TotalPages - 1) * pageSize })
+
         };
 
         var options = new JsonSerializerOptions
