@@ -1,4 +1,4 @@
-namespace cookbook.Models;
+namespace ProblemDetailsDemo.Models;
 
 public class ProductDTO
 {

@@ -1,5 +1,5 @@
-using cookbook.Models;
-namespace cookbook.Services;
+using ProblemDetailsDemo.Models;
+namespace ProblemDetailsDemo.Services;
 
 public interface IProductsService {
     Task<IEnumerable<ProductDTO>> GetAllProductsAsync();

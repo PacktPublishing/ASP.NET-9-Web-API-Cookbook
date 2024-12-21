@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using cookbook.Models;
+using ProblemDetailsDemo.Models;
 
-namespace cookbook.Data;
+namespace ProblemDetailsDemo.Data;
 
 public class AppDbContext : DbContext
 {

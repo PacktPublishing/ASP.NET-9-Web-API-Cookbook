@@ -1,9 +1,9 @@
-using cookbook.Data;
-using cookbook.Models;
+using ProblemDetailsDemo.Data;
+using ProblemDetailsDemo.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using Bogus;
-using cookbook.Services;
+using ProblemDetailsDemo.Services;
 using Microsoft.Data.Sqlite;
 
 var builder = WebApplication.CreateBuilder(args);
