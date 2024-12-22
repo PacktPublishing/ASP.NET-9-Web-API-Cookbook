@@ -1,6 +1,6 @@
-using aggregateBy.Data;
-using aggregateBy.Models;
-using aggregateBy.Services;
+using AggregateBy.Data;
+using AggregateBy.Models;
+using AggregateBy.Services;
 using Microsoft.EntityFrameworkCore;
 
 public class ProductReadService(AppDbContext context) : IProductReadService

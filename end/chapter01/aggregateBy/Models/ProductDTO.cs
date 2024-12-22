@@ -1,4 +1,4 @@
-namespace aggregateBy.Models;
+namespace AggregateBy.Models;
 
 public class ProductDTO
 {

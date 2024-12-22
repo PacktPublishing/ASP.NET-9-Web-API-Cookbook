@@ -1,9 +1,9 @@
-using aggregateBy.Data;
-using aggregateBy.Models;
+using AggregateBy.Data;
+using AggregateBy.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.Sqlite;
 using Bogus;
-using aggregateBy.Services;
+using AggregateBy.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,5 +1,5 @@
-using aggregateBy.Models;
-namespace aggregateBy.Services;
+using AggregateBy.Models;
+namespace AggregateBy.Services;
 
 public interface IProductReadService {
     Task<IEnumerable<ProductDTO>> GetAllProductsAsync();

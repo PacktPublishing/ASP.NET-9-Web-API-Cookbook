@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using aggregateBy.Models;
-using aggregateBy.Services;
+using AggregateBy.Models;
+using AggregateBy.Services;
 using System.Text.Json;
 
-namespace aggregateBy.Controllers;
+namespace AggregateBy.Controllers;
 
 [Route("[controller]")]
 [ApiController]

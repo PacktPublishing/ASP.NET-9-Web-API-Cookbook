@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using aggregateBy.Models;
+using AggregateBy.Models;
 
-namespace aggregateBy.Data;
+namespace AggregateBy.Data;
 
 public class AppDbContext : DbContext
 {
