@@ -4,18 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace events.Services;
 
-public class EFCoreService : IEFCoreService
+public class EFCoreService(IEFCoreRepository repository) : IEFCoreService
 {
-    private readonly IEFCoreRepository _repository;
-
-    public EFCoreService(IEFCoreRepository repository)
-    {
-        _repository = repository;
-    }
-
     public async Task<PagedResult<EventRegistrationDTO>> GetEventRegistrationsAsync(int pageSize, int lastId, IUrlHelper urlHelper)
     {
-        var (eventRegistrations, hasNextPage) = await _repository.GetEventRegistrationsAsync(pageSize, lastId);
+        var (eventRegistrations, hasNextPage) = await repository.GetEventRegistrationsAsync(pageSize, lastId);
 
         var items = eventRegistrations.Select(e => new EventRegistrationDTO
         {
@@ -47,10 +40,9 @@ public class EFCoreService : IEFCoreService
         };
     }
 
-
     public async Task<EventRegistrationDTO?> GetEventRegistrationByIdAsync(int id)
     {
-        var eventRegistration = await _repository.GetEventRegistrationByIdAsync(id);
+        var eventRegistration = await repository.GetEventRegistrationByIdAsync(id);
         if (eventRegistration == null) return null;
 
         return new EventRegistrationDTO
@@ -65,4 +57,3 @@ public class EFCoreService : IEFCoreService
         };
     }
 }
-

@@ -10,11 +10,12 @@ public class EFCoreRepository : IEFCoreRepository
 
     public EFCoreRepository(AppDbContext context)
     {
-        _context = context;
+        _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
     public async Task<(IReadOnlyCollection<EventRegistration> Items, bool HasNextPage)> GetEventRegistrationsAsync(int pageSize, int lastId)
     {
+        ArgumentNullException.ThrowIfNull(_context.EventRegistrations);
         var query = _context.EventRegistrations .Where(e => e.Id > lastId) .OrderBy(e => e.Id)
             .Take(pageSize + 1); // Fetch one more record to determine HasNextPage
 
@@ -28,11 +29,16 @@ public class EFCoreRepository : IEFCoreRepository
 
     public async Task<EventRegistration?> GetEventRegistrationByIdAsync(int id)
     {
+        ArgumentNullException.ThrowIfNull(_context.EventRegistrations);
+
         return await _context.EventRegistrations.FindAsync(id);
     }
 
     public async Task<EventRegistration> CreateEventRegistrationAsync(EventRegistration eventRegistration)
     {
+        ArgumentNullException.ThrowIfNull(_context.EventRegistrations);
+        ArgumentNullException.ThrowIfNull(eventRegistration);
+
         _context.EventRegistrations.Add(eventRegistration);
         await _context.SaveChangesAsync();
         return eventRegistration;

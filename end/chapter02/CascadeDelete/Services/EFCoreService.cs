@@ -5,21 +5,11 @@ using AutoMapper;
 
 namespace events.Services;
 
-public class EFCoreService : IEFCoreService
+public class EFCoreService(IEFCoreRepository repository, IMapper mapper) : IEFCoreService
 {
-    private readonly IEFCoreRepository _repository;
-    private readonly IMapper _mapper;
-
-    public EFCoreService(IEFCoreRepository repository, IMapper mapper)
-    {
-        _repository = repository;
-        _mapper = mapper;
-
-    }
-
     public async Task<PagedResult<EventRegistrationDTO>> GetEventRegistrationsAsync(int pageSize, int lastId, IUrlHelper urlHelper)
     {
-        var (eventRegistrations, hasNextPage) = await _repository.GetEventRegistrationsAsync(pageSize, lastId);
+        var (eventRegistrations, hasNextPage) = await repository.GetEventRegistrationsAsync(pageSize, lastId);
 
         var items = eventRegistrations.Select(e => new EventRegistrationDTO
         {
@@ -54,7 +44,7 @@ public class EFCoreService : IEFCoreService
 
     public async Task<EventRegistrationDTO?> GetEventRegistrationByIdAsync(int id)
     {
-        var eventRegistration = await _repository.GetEventRegistrationByIdAsync(id);
+        var eventRegistration = await repository.GetEventRegistrationByIdAsync(id);
         if (eventRegistration == null) return null;
 
         return new EventRegistrationDTO
@@ -80,7 +70,7 @@ public class EFCoreService : IEFCoreService
             DaysAttending = eventRegistrationDTO.DaysAttending
         };
 
-        var result = await _repository.CreateEventRegistrationAsync(eventRegistration);
+        var result = await repository.CreateEventRegistrationAsync(eventRegistration);
 
         return new EventRegistrationDTO
         {
@@ -96,12 +86,12 @@ public class EFCoreService : IEFCoreService
 
      public async Task UpdateEventRegistrationAsync(EventRegistrationDTO eventRegistrationDto)
     {
-        var eventRegistration = _mapper.Map<EventRegistration>(eventRegistrationDto);
-        await _repository.UpdateEventRegistrationAsync(eventRegistration);
+        var eventRegistration = mapper.Map<EventRegistration>(eventRegistrationDto);
+        await repository.UpdateEventRegistrationAsync(eventRegistration);
     }
 
      public async Task DeleteEventRegistrationAsync(int id)
     {
-        await _repository.DeleteEventRegistrationAsync(id);
+        await repository.DeleteEventRegistrationAsync(id);
     }
 }
