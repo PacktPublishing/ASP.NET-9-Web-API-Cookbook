@@ -1,8 +1,8 @@
 using Dapper;
 using Microsoft.Data.Sqlite;
-using events.Models;
+using DataAnnotations.Models;
 
-namespace events.Repositories;
+namespace DataAnnotations.Repositories;
 
 public class DapperRepository : IDapperRepository
 {

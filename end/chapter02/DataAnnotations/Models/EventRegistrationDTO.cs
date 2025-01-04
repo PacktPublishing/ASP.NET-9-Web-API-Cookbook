@@ -1,20 +1,20 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace events.Models;
+namespace DataAnnotations.Models;
 
 public class EventRegistrationDTO
 {
     public int Id { get; set; }
 
     [Required]
-    public string FullName { get; set; } = string.Empty;
+    public required string FullName { get; set; }
 
     [Required]
     [EmailAddress]
-    public string Email { get; set; } = string.Empty;
+    public required string Email { get; set; }
 
     [Required]
-    public string EventName { get; set; } = string.Empty;
+    public required string EventName { get; set; }
 
     [Required]
     [DataType(DataType.Date)]
@@ -22,7 +22,7 @@ public class EventRegistrationDTO
 
     [Required]
     [Compare("Email", ErrorMessage = "Email addresses do not match.")]
-    public string ConfirmEmail { get; set; } = string.Empty;
+    public required string ConfirmEmail { get; set; }
 
     [Required]
     [Range(1, 7, ErrorMessage = "Number of days attending must be between 1 and 7.")]

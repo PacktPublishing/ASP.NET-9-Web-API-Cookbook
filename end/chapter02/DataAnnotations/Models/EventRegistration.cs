@@ -1,4 +1,4 @@
-namespace events.Models
+namespace DataAnnotations.Models
 {
     public class EventRegistration
     {
@@ -6,17 +6,17 @@ namespace events.Models
 
         public Guid GUID { get; set; }
 
-        public string FullName { get; set; } = string.Empty;
+        public required string FullName { get; set; }
 
-        public string Email { get; set; } = string.Empty;
+        public required string Email { get; set; }
 
-        public string EventName { get; set; } = string.Empty;
+        public required string EventName { get; set; }
 
         public DateTime EventDate { get; set; }
 
         public int DaysAttending { get; set; }
 
-        public string Notes { get; set; } = string.Empty;
+        public string? Notes { get; set; }
     }
 }
 

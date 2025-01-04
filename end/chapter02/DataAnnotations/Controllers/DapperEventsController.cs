@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using events.Services;
-using events.Models;
+using DataAnnotations.Services;
+using DataAnnotations.Models;
 using System.Text.Json;
 
-namespace events.Controllers;
+namespace DataAnnotations.Controllers;
 
 [Route("api/dapper/[controller]")]
 [ApiController]

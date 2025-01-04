@@ -1,6 +1,6 @@
-using events.Models;
+using DataAnnotations.Models;
 
-namespace events.Repositories;
+namespace DataAnnotations.Repositories;
 
 public interface IDapperRepository
 {

@@ -2,10 +2,10 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using Bogus;
-using events.Models;
-using events.Data;
-using events.Services;
-using events.Repositories;
+using DataAnnotations.Models;
+using DataAnnotations.Data;
+using DataAnnotations.Services;
+using DataAnnotations.Repositories;
 using Dapper;
 
 var builder = WebApplication.CreateBuilder(args);

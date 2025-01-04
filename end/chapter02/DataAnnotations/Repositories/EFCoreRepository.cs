@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using events.Data;
-using events.Models;
+using DataAnnotations.Data;
+using DataAnnotations.Models;
 
-namespace events.Repositories;
+namespace DataAnnotations.Repositories;
 
 public class EFCoreRepository : IEFCoreRepository
 {

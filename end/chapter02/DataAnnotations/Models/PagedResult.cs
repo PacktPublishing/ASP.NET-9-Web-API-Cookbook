@@ -1,4 +1,4 @@
-namespace events.Models;
+namespace DataAnnotations.Models;
 
 public class PagedResult<T>
 {
@@ -8,9 +8,9 @@ public class PagedResult<T>
 
     public bool HasNextPage { get; set; }
 
-    public string? PreviousPageUrl { get; set; } = string.Empty;
+    public required string? PreviousPageUrl { get; set; }
 
-    public string? NextPageUrl { get; set; } = string.Empty;
+    public required string? NextPageUrl { get; set; }
 
     public int PageSize { get; set; }
 }
