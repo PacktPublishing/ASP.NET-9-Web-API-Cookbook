@@ -1,6 +1,6 @@
-using FluentValidation.Models;
+using FluentExample.Models;
 
-namespace FluentValidation.Repositories;
+namespace FluentExample.Repositories;
 
 public interface IDapperRepository
 {

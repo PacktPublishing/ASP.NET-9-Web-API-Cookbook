@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace FluentValidation.Models;
+namespace FluentExample.Models;
 
 public class EventRegistrationDTO
 {

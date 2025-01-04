@@ -2,10 +2,10 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using Bogus;
-using FluentValidation.Models;
-using FluentValidation.Data;
-using FluentValidation.Services;
-using FluentValidation.Repositories;
+using FluentExample.Models;
+using FluentExample.Data;
+using FluentExample.Services;
+using FluentExample.Repositories;
 using Dapper;
 
 var builder = WebApplication.CreateBuilder(args);

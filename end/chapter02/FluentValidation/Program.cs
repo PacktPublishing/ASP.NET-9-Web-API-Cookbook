@@ -1,11 +1,12 @@
 using Microsoft.Data.Sqlite;
+using Microsoft.AspNetCore.OpenApi;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using Bogus;
-using FluentValidation.Models;
-using FluentValidation.Data;
-using FluentValidation.Services;
-using FluentValidation.Repositories;
+using FluentExample.Models;
+using FluentExample.Data;
+using FluentExample.Services;
+using FluentExample.Repositories;
 using Dapper;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -49,12 +50,12 @@ var app = builder.Build();
 
 app.UseResponseCaching();
 app.MapOpenApi();
+app.MapScalarApiReference();
 
 app.UseAuthorization();
 app.UseCors();
 
 app.MapControllers();
-app.MapScalarApiReference();
 
 var connectionStringBuilder = new SqliteConnectionStringBuilder();
 connectionStringBuilder.DataSource = "./Data/SqliteDB.db";

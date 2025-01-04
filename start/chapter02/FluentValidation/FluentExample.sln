@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentValidation", "FluentValidation.csproj", "{B3F10909-17CB-4ABE-BB8C-4517E2E407DF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentExample", "FluentExample.csproj", "{C33CBA9F-003A-409C-9F6F-FEC1C2E68084}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,9 +14,9 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B3F10909-17CB-4ABE-BB8C-4517E2E407DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B3F10909-17CB-4ABE-BB8C-4517E2E407DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B3F10909-17CB-4ABE-BB8C-4517E2E407DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B3F10909-17CB-4ABE-BB8C-4517E2E407DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C33CBA9F-003A-409C-9F6F-FEC1C2E68084}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C33CBA9F-003A-409C-9F6F-FEC1C2E68084}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C33CBA9F-003A-409C-9F6F-FEC1C2E68084}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C33CBA9F-003A-409C-9F6F-FEC1C2E68084}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

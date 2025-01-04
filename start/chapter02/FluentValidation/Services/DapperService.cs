@@ -1,8 +1,8 @@
-using FluentValidation.Repositories;
-using FluentValidation.Models;
+using FluentExample.Repositories;
+using FluentExample.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FluentValidation.Services;
+namespace FluentExample.Services;
 
 public class DapperService : IDapperService
 {

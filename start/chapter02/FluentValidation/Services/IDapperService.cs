@@ -1,7 +1,7 @@
-using FluentValidation.Models;
+using FluentExample.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FluentValidation.Services
+namespace FluentExample.Services
 {
     public interface IDapperService
     {
