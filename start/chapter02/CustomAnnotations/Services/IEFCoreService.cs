@@ -1,7 +1,7 @@
-using events.Models;
+using CustomAnnotations.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace events.Services;
+namespace CustomAnnotations.Services;
 
 public interface IEFCoreService
 {

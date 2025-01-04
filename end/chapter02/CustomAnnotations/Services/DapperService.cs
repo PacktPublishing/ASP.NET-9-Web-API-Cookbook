@@ -1,8 +1,8 @@
-using events.Repositories;
-using events.Models;
+using CustomAnnotations.Repositories;
+using CustomAnnotations.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace events.Services;
+namespace CustomAnnotations.Services;
 
 public class DapperService : IDapperService
 {

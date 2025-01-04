@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using events.Data;
-using events.Models;
+using CustomAnnotations.Data;
+using CustomAnnotations.Models;
 
-namespace events.Repositories;
+namespace CustomAnnotations.Repositories;
 
 public class EFCoreRepository : IEFCoreRepository
 {
@@ -10,11 +10,13 @@ public class EFCoreRepository : IEFCoreRepository
 
     public EFCoreRepository(AppDbContext context)
     {
-        _context = context;
+        _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
     public async Task<(IReadOnlyCollection<EventRegistration> Items, bool HasNextPage)> GetEventRegistrationsAsync(int pageSize, int lastId)
     {
+        ArgumentOutOfRangeException.ThrowIfNegative(pageSize);
+
         var query = _context.EventRegistrations .Where(e => e.Id > lastId) .OrderBy(e => e.Id)
             .Take(pageSize + 1); // Fetch one more record to determine HasNextPage
 
@@ -33,6 +35,8 @@ public class EFCoreRepository : IEFCoreRepository
 
     public async Task<EventRegistration> CreateEventRegistrationAsync(EventRegistration eventRegistration)
     {
+        ArgumentNullException.ThrowIfNull(eventRegistration);
+
         _context.EventRegistrations.Add(eventRegistration);
         await _context.SaveChangesAsync();
         return eventRegistration;

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using events.Models;
+using CustomAnnotations.Models;
 
-namespace events.Data;
+namespace CustomAnnotations.Data;
 
 public class AppDbContext : DbContext
 {

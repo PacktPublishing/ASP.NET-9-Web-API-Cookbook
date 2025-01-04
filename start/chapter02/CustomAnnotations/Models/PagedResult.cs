@@ -1,4 +1,4 @@
-namespace events.Models;
+namespace CustomAnnotations.Models;
 
 public class PagedResult<T>
 {
