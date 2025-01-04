@@ -1,5 +1,5 @@
 using FluentValidation;
-using events.Models;
+using FluentValidation.Models;
 
 public class EventRegistrationDTOValidator : AbstractValidator<EventRegistrationDTO>
 {

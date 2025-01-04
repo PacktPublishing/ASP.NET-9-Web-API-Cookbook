@@ -1,4 +1,4 @@
-namespace events.Models
+namespace FluentValidation.Models
 {
     public class EventRegistration
     {

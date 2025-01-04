@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace events.Models;
+namespace FluentValidation.Models;
 
 public class AllowedValuesAttribute : ValidationAttribute
 {

@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using events.Services;
-using events.Models;
+using FluentValidation.Services;
+using FluentValidation.Models;
 using System.Text.Json;
 
-namespace events.Controllers;
+namespace FluentValidation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]

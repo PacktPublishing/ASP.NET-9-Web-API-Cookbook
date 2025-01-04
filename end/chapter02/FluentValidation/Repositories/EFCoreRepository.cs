@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using events.Data;
-using events.Models;
+using FluentValidation.Data;
+using FluentValidation.Models;
 
-namespace events.Repositories;
+namespace FluentValidation.Repositories;
 
 public class EFCoreRepository : IEFCoreRepository
 {

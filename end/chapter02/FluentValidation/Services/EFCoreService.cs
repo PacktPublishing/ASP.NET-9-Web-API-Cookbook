@@ -1,8 +1,8 @@
-using events.Repositories;
-using events.Models;
+using FluentValidation.Repositories;
+using FluentValidation.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace events.Services;
+namespace FluentValidation.Services;
 
 public class EFCoreService : IEFCoreService
 {
