@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using events.Models;
+using FluentValidation.Models;
 
-namespace events.Data;
+namespace FluentValidation.Data;
 
 public class AppDbContext : DbContext
 {

@@ -1,8 +1,8 @@
 using Dapper;
 using Microsoft.Data.Sqlite;
-using events.Models;
+using FluentValidation.Models;
 
-namespace events.Repositories;
+namespace FluentValidation.Repositories;
 
 public class DapperRepository : IDapperRepository
 {
