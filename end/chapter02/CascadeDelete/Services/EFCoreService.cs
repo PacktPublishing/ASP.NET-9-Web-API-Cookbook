@@ -84,13 +84,13 @@ public class EFCoreService(IEFCoreRepository repository, IMapper mapper) : IEFCo
         };
     }
 
-     public async Task UpdateEventRegistrationAsync(EventRegistrationDTO eventRegistrationDto)
+    public async Task UpdateEventRegistrationAsync(EventRegistrationDTO eventRegistrationDto)
     {
         var eventRegistration = mapper.Map<EventRegistration>(eventRegistrationDto);
         await repository.UpdateEventRegistrationAsync(eventRegistration);
     }
 
-     public async Task DeleteEventRegistrationAsync(int id)
+    public async Task DeleteEventRegistrationAsync(int id)
     {
         await repository.DeleteEventRegistrationAsync(id);
     }
