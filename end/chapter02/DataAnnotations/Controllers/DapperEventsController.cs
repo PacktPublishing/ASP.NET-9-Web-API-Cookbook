@@ -7,17 +7,8 @@ namespace DataAnnotations.Controllers;
 
 [Route("api/dapper/[controller]")]
 [ApiController]
-public class DapperEventsController : ControllerBase
+public class DapperEventsController(IDapperService service, ILogger<DapperEventsController> logger) : ControllerBase
 {
-    private readonly IDapperService _service;
-    private readonly ILogger<DapperEventsController> _logger;
-
-    public DapperEventsController(IDapperService service, ILogger<DapperEventsController> logger)
-    {
-        _service = service;
-        _logger = logger;
-    }
-
     [HttpGet]
     [EndpointSummary("Paged Event Registrations")]
     [EndpointDescription("This returns all the event registrations from our SQLite database, using Dapper")]
@@ -28,8 +19,8 @@ public class DapperEventsController : ControllerBase
     {
         try
         {
-            _logger.LogInformation("Fetching event registrations with pageSize: {PageSize}, lastId: {LastId}", pageSize, lastId);
-            var pagedResult = await _service.GetEventRegistrationsAsync(pageSize, lastId, Url);
+            logger.LogInformation("Fetching event registrations with pageSize: {PageSize}, lastId: {LastId}", pageSize, lastId);
+            var pagedResult = await service.GetEventRegistrationsAsync(pageSize, lastId, Url);
 
             var paginationMetadata = new
             {
@@ -51,7 +42,7 @@ public class DapperEventsController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while fetching event registrations.");
+            logger.LogError(ex, "An error occurred while fetching event registrations.");
             return StatusCode(500, "An error occurred while fetching event registrations.");
         }
     }
@@ -70,7 +61,7 @@ public class DapperEventsController : ControllerBase
 
         try
         {
-            var eventRegistration = await _service.GetEventRegistrationByIdAsync(id);
+            var eventRegistration = await service.GetEventRegistrationByIdAsync(id);
             if (eventRegistration == null)
             {
                 return NotFound();
@@ -80,7 +71,7 @@ public class DapperEventsController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while fetching event registration by Id: {Id}", id);
+            logger.LogError(ex, "An error occurred while fetching event registration by Id: {Id}", id);
             return StatusCode(500, "An error occurred while fetching event registration by Id.");
         }
     }
@@ -97,7 +88,7 @@ public class DapperEventsController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var createdEvent = await _service.CreateEventRegistrationAsync(eventRegistrationDto);
+        var createdEvent = await service.CreateEventRegistrationAsync(eventRegistrationDto);
 
         return CreatedAtAction(nameof(GetEventRegistrationById), new { id = createdEvent.Id }, createdEvent);
 
