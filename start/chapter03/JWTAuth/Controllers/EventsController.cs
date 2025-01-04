@@ -8,18 +8,8 @@ namespace events.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class EventsController : ControllerBase
+public class EventsController(IEventsService service, ILogger<EventsController> logger) : ControllerBase
 {
-    private readonly IEventsService _service;
-    private readonly ILogger<EventsController> _logger;
-
-    public EventsController(IEventsService service, ILogger<EventsController> logger)
-    {
-        _service = service;
-        _logger = logger;
-    }
-
-
     [HttpGet]
     [EndpointSummary("Paged Event Registrations")]
     [EndpointDescription("This returns all the event registrations from our SQLite database, using EF Core")]
@@ -30,8 +20,8 @@ public class EventsController : ControllerBase
     {
         try
         {
-            _logger.LogInformation("Fetching event registrations with pageSize: {PageSize}, lastId: {LastId}", pageSize, lastId);
-            var pagedResult = await _service.GetEventRegistrationsAsync(pageSize, lastId, Url);
+            logger.LogInformation("Fetching event registrations with pageSize: {PageSize}, lastId: {LastId}", pageSize, lastId);
+            var pagedResult = await service.GetEventRegistrationsAsync(pageSize, lastId, Url);
 
             var paginationMetadata = new
             {
@@ -53,7 +43,7 @@ public class EventsController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while fetching event registrations.");
+            logger.LogError(ex, "An error occurred while fetching event registrations.");
             return StatusCode(500, "An error occurred while fetching event registrations.");
         }
     }
@@ -72,7 +62,7 @@ public class EventsController : ControllerBase
 
         try
         {
-            var eventRegistration = await _service.GetEventRegistrationByIdAsync(id);
+            var eventRegistration = await service.GetEventRegistrationByIdAsync(id);
             if (eventRegistration == null)
             {
                 return NotFound();
@@ -82,7 +72,7 @@ public class EventsController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while fetching event registration by Id: {Id}", id);
+            logger.LogError(ex, "An error occurred while fetching event registration by Id: {Id}", id);
             return StatusCode(500, "An error occurred while fetching event registration by Id.");
         }
     }
@@ -99,7 +89,7 @@ public class EventsController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var createdEvent = await _service.CreateEventRegistrationAsync(eventRegistrationDto);
+        var createdEvent = await service.CreateEventRegistrationAsync(eventRegistrationDto);
 
         return CreatedAtAction(nameof(GetEventRegistrationById), new { id = createdEvent.Id }, createdEvent);
 
