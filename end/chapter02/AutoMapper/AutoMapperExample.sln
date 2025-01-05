@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMapperExample", "AutoMapperExample.csproj", "{3AAFA50A-73A4-49F7-8A56-087506E97E04}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMapperExample", "AutoMapperExample.csproj", "{1E74BCB9-5FD1-41A1-B950-342925D3B51E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,9 +14,9 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3AAFA50A-73A4-49F7-8A56-087506E97E04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3AAFA50A-73A4-49F7-8A56-087506E97E04}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3AAFA50A-73A4-49F7-8A56-087506E97E04}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3AAFA50A-73A4-49F7-8A56-087506E97E04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E74BCB9-5FD1-41A1-B950-342925D3B51E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E74BCB9-5FD1-41A1-B950-342925D3B51E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E74BCB9-5FD1-41A1-B950-342925D3B51E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E74BCB9-5FD1-41A1-B950-342925D3B51E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
