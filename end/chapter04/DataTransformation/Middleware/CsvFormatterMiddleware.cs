@@ -1,7 +1,7 @@
 using System.Text.Json;
-using books.Models;
+using Books.Models;
 
-namespace books.Middleware;
+namespace Books.Middleware;
 
 public class CsvFormatterMiddleware : IResponseFormatterMiddleware
 {

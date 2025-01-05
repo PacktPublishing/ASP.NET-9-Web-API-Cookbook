@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace books.Middleware;
+namespace Books.Middleware;
 
 public class JsonFormatterMiddleware : IResponseFormatterMiddleware
 {

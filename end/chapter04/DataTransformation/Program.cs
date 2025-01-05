@@ -24,7 +24,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddOpenApi("chapter4", options =>
 {
-options.UseTransformer((document, context, cancellationToken) =>
+options.AddDocumentTransformer((document, context, cancellationToken) =>
 {
     document.Info = new OpenApiInfo
     {

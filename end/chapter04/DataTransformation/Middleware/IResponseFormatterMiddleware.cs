@@ -1,4 +1,4 @@
-namespace books.Middleware;
+namespace Books.Middleware;
 
 public interface IResponseFormatterMiddleware : IMiddleware
 {

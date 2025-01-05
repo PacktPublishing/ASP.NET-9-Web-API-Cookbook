@@ -1,18 +1,11 @@
 using System.Xml;
 using System.Text.Json;
 
-namespace books.Middleware;
+namespace Books.Middleware;
 
 
-public class XmlFormatterMiddleware : IMiddleware
+public class XmlFormatterMiddleware(ILogger<XmlFormatterMiddleware> logger) : IMiddleware
 {
-    private readonly ILogger<XmlFormatterMiddleware> _logger;
-
-    public XmlFormatterMiddleware(ILogger<XmlFormatterMiddleware> logger)
-    {
-        _logger = logger;
-    }
-
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         var originalBodyStream = context.Response.Body;
@@ -30,7 +23,7 @@ public class XmlFormatterMiddleware : IMiddleware
                 
                 responseBody.Seek(0, SeekOrigin.Begin);
                 var responseContent = await new StreamReader(responseBody).ReadToEndAsync();
-                _logger.LogInformation("Original response content: {Content}", responseContent);
+                logger.LogInformation("Original response content: {Content}", responseContent);
 
                 var jsonDocument = JsonDocument.Parse(responseContent);
 

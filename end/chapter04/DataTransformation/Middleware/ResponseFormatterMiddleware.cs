@@ -1,4 +1,4 @@
-namespace books.Middleware;
+namespace Books.Middleware;
 
 public class ResponseFormatterMiddleware
 {
