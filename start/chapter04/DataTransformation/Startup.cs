@@ -5,13 +5,13 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
-using books.Data;
-using books.Services;
-using books.Repositories;
-using books.Middleware;
+using Books.Data;
+using Books.Services;
+using Books.Repositories;
+using Books.Middleware;
 
 
-namespace books;
+namespace Books;
 
 public class Startup
 {
@@ -36,7 +36,7 @@ public class Startup
         
     services.AddOpenApi("chapter4", options =>
     {
-        options.UseTransformer((document, context, cancellationToken) =>
+        options.AddDocumentTransformer((document, context, cancellationToken) =>
         {
             document.Info = new OpenApiInfo
             {
@@ -80,7 +80,7 @@ public class Startup
             new SqliteConnection(Configuration.GetConnectionString("DefaultConnection")));
 
         services.AddHealthChecks()
-            .AddCheck<DatabasePerformanceHealthCheck>("database_performance", tags: new[] {"database"});
+            .AddCheck<DatabasePerformanceHealthCheck>("database_performance", tags: ["database"]);
 
     }
 
