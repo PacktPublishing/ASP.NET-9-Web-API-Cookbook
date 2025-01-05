@@ -109,7 +109,6 @@ ResponseWriter = async (context, report) =>
     }
 });
 
-
 DatabaseSeeder.Initialize(app.Services);
 
 app.Run();
