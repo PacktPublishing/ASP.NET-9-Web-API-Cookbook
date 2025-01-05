@@ -2,9 +2,9 @@ using System.Data;
 using System.Diagnostics;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using books.Options;
+using Books.Options;
 
-namespace books.Middleware;
+namespace Books.Middleware;
 
 public class DatabasePerformanceHealthCheck : IHealthCheck
     {

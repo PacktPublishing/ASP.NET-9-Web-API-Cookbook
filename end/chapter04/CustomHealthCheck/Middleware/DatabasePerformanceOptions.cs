@@ -1,4 +1,4 @@
-namespace books.Options;
+namespace Books.Options;
 
 public class DatabasePerformanceOptions
 {
