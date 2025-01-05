@@ -6,38 +6,27 @@ using Books.Options;
 
 namespace Books.Middleware;
 
-public class DatabasePerformanceHealthCheck : IHealthCheck
-    {
-        private readonly IDbConnection _dbConnection;
-        private readonly ILogger<DatabasePerformanceHealthCheck> _logger;
-        private readonly IOptionsMonitor<DatabasePerformanceOptions> _options;
-
-        public DatabasePerformanceHealthCheck(
+public class DatabasePerformanceHealthCheck(
             IDbConnection dbConnection, 
             ILogger<DatabasePerformanceHealthCheck> logger,
-            IOptionsMonitor<DatabasePerformanceOptions> options)
-        {
-            _dbConnection = dbConnection;
-            _logger = logger;
-            _options = options;
-        }
-
+            IOptionsMonitor<DatabasePerformanceOptions> options): IHealthCheck
+    {
         public Task<HealthCheckResult> CheckHealthAsync(
             HealthCheckContext context,
             CancellationToken cancellationToken = default)
         {
-            var options = _options.Get(context.Registration.Name);
+            var optionsSnapshot = options.Get(context.Registration.Name);
             var data = new Dictionary<string, object>();
 
             try
             {
                 var stopwatch = Stopwatch.StartNew();
                 
-                _dbConnection.Open();
+                dbConnection.Open();
 
-                using var command = _dbConnection.CreateCommand();
-                command.CommandText = options.TestQuery;
-                command.CommandTimeout = options.QueryTimeoutThreshold / 1000; 
+                using var command = dbConnection.CreateCommand();
+                command.CommandText = optionsSnapshot.TestQuery;
+                command.CommandTimeout = optionsSnapshot.QueryTimeoutThreshold / 1000; 
 
                 using var reader = command.ExecuteReader();
                 if (reader.Read())
@@ -50,15 +39,15 @@ public class DatabasePerformanceHealthCheck : IHealthCheck
                 var elapsed = stopwatch.ElapsedMilliseconds;
 
                 data.Add("QueryExecutionTime", elapsed);
-                data.Add("TestQuery", options.TestQuery);
+                data.Add("TestQuery", optionsSnapshot.TestQuery);
 
-                if (elapsed < options.DegradedThreshold)
+                if (elapsed < optionsSnapshot.DegradedThreshold)
                 {
                     return Task.FromResult(HealthCheckResult.Healthy(
                         $"Database query completed in {elapsed}ms",
                         data));
                 }
-                else if (elapsed < options.QueryTimeoutThreshold)
+                else if (elapsed < optionsSnapshot.QueryTimeoutThreshold)
                 {
                     return Task.FromResult(HealthCheckResult.Degraded(
                         $"Database query took {elapsed}ms, which is slower than expected",
@@ -73,7 +62,7 @@ public class DatabasePerformanceHealthCheck : IHealthCheck
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Database health check failed");
+                logger.LogError(ex, "Database health check failed");
                 data.Add("ExceptionMessage", ex.Message);
                 data.Add("ExceptionStackTrace", ex.StackTrace!);
                 return Task.FromResult(HealthCheckResult.Unhealthy(
@@ -83,9 +72,9 @@ public class DatabasePerformanceHealthCheck : IHealthCheck
             }
             finally
             {
-                if (_dbConnection.State == ConnectionState.Open)
+                if (dbConnection.State == ConnectionState.Open)
                 {
-                    _dbConnection.Close();
+                    dbConnection.Close();
                 }
             }
         }

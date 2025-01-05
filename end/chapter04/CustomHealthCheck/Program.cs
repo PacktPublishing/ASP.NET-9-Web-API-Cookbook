@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
 using Books.Data;
-using Books.Options;
 using Books.Services;
 using Books.Repositories;
 using Books.Middleware;
@@ -70,7 +69,7 @@ builder.Services.Configure<DatabasePerformanceOptions>(
 
 builder.Services.AddHealthChecks()
     .AddCheck<DatabasePerformanceHealthCheck>("database_performance", 
-        tags: new[] { "database" });
+        tags: ["database"]);
 
 var app = builder.Build();
 
