@@ -3,9 +3,9 @@ using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Scalar.AspNetCore;
-using books.Data;
-using books.Services;
-using books.Repositories;
+using Books.Data;
+using Books.Services;
+using Books.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
