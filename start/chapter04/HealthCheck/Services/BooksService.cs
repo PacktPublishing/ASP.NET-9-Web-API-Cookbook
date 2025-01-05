@@ -4,18 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace books.Services;
 
-public class BooksService : IBooksService
+public class BooksService(IBooksRepository repository) : IBooksService
 {
-    private readonly IBooksRepository _repository;
-
-    public BooksService(IBooksRepository repository)
-    {
-        _repository = repository;
-    }
-
     public async Task<PagedResult<BookDTO>> GetBooksAsync(int pageSize, int lastId, IUrlHelper urlHelper)
     {
-        var books = await _repository.GetBooksAsync(pageSize + 1, lastId);
+        var books = await repository.GetBooksAsync(pageSize + 1, lastId);
         
         var items = books.Take(pageSize).Select(b => new BookDTO
         {
@@ -48,7 +41,7 @@ public class BooksService : IBooksService
 
     public async Task<BookDTO?> GetBookByIdAsync(int id)
     {
-        var book = await _repository.GetBookByIdAsync(id);
+        var book = await repository.GetBookByIdAsync(id);
         if (book == null) return null;
         return new BookDTO
         {
@@ -73,7 +66,7 @@ public class BooksService : IBooksService
             Genre = bookDTO.Genre,
             Summary = bookDTO.Summary
         };
-        var result = await _repository.CreateBookAsync(book);
+        var result = await repository.CreateBookAsync(book);
         return new BookDTO
         {
             Id = result.Id,

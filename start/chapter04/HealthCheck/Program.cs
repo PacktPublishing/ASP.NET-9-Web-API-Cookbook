@@ -1,19 +1,41 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.Sqlite;
+using Scalar.AspNetCore;
+using books.Data;
+using books.Services;
+using books.Repositories;
 
-namespace books;
+var builder = WebApplication.CreateBuilder(args);
 
-public class Program
+builder.Services.AddCors(options =>
 {
-    public static void Main(string[] args)
+    options.AddDefaultPolicy(builder =>
     {
-        CreateHostBuilder(args).Build().Run();
-    }
+        builder.AllowAnyOrigin()
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
+});
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddOpenApi("chapter4");
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<IBooksRepository, BooksRepository>();
+builder.Services.AddScoped<IBooksService, BooksService>();
 
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.UseStartup<Startup>();
-            });
-}
+var app = builder.Build();
+
+app.UseForwardedHeaders();
+app.UseRouting();
+app.UseCors();
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseResponseCaching();
+app.MapControllers();
+app.MapOpenApi();
+app.MapScalarApiReference();
+
+DatabaseSeeder.Initialize(app.Services);
+
+app.Run();

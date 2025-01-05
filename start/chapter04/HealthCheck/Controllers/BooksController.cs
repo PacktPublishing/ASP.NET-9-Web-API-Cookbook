@@ -7,18 +7,8 @@ namespace books.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class BooksController : ControllerBase
+public class BooksController(IBooksService service, ILogger<BooksController> logger) : ControllerBase
 {
-    private readonly IBooksService _service;
-    private readonly ILogger<BooksController> _logger;
-
-    public BooksController(IBooksService service, ILogger<BooksController> logger)
-    {
-        _service = service;
-        _logger = logger;
-    }
-
-
     [HttpGet]
     [EndpointSummary("Paged Book Inforation")]
     [EndpointDescription("This returns all the books from our SQLite database, using EF Core")]
@@ -29,8 +19,8 @@ public class BooksController : ControllerBase
     {
         try
         {
-            _logger.LogInformation("Fetching event registrations with pageSize: {PageSize}, lastId: {LastId}", pageSize, lastId);
-            var pagedResult = await _service.GetBooksAsync(pageSize, lastId, Url);
+            logger.LogInformation("Fetching event registrations with pageSize: {PageSize}, lastId: {LastId}", pageSize, lastId);
+            var pagedResult = await service.GetBooksAsync(pageSize, lastId, Url);
 
             var paginationMetadata = new
             {
@@ -52,7 +42,7 @@ public class BooksController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while fetching event registrations.");
+            logger.LogError(ex, "An error occurred while fetching event registrations.");
             return StatusCode(500, "An error occurred while fetching event registrations.");
         }
     }
@@ -71,7 +61,7 @@ public class BooksController : ControllerBase
 
         try
         {
-            var eventRegistration = await _service.GetBookByIdAsync(id);
+            var eventRegistration = await service.GetBookByIdAsync(id);
             if (eventRegistration == null)
             {
                 return NotFound();
@@ -81,7 +71,7 @@ public class BooksController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while fetching event registration by Id: {Id}", id);
+            logger.LogError(ex, "An error occurred while fetching event registration by Id: {Id}", id);
             return StatusCode(500, "An error occurred while fetching event registration by Id.");
         }
     }
@@ -99,12 +89,12 @@ public class BooksController : ControllerBase
         }
         try
         {
-            var createdBook = await _service.CreateBookAsync(bookDto);
+            var createdBook = await service.CreateBookAsync(bookDto);
             return CreatedAtAction(nameof(GetBookById), new { id = createdBook.Id }, createdBook);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while creating a new book.");
+            logger.LogError(ex, "An error occurred while creating a new book.");
             return StatusCode(500, "An error occurred while creating a new book.");
         }
     }
