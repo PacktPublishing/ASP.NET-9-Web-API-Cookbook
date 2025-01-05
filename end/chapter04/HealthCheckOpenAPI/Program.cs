@@ -75,7 +75,6 @@ builder.Services.AddHealthChecks()
 
 var app = builder.Build();
 
-// Configure middleware pipeline
 app.UseForwardedHeaders();
 app.UseRouting();
 app.UseCors();
