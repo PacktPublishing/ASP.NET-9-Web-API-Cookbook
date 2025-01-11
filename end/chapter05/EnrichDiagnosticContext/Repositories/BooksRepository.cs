@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using books.Data;
-using books.Models;
+using Books.Data;
+using Books.Models;
 
-namespace books.Repositories;
+namespace Books.Repositories;
 
 public class BooksRepository : IBooksRepository
 {
