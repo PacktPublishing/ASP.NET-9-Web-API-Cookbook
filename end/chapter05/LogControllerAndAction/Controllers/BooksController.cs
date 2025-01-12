@@ -1,21 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
-using books.Services;
-using books.Models;
+using Books.Services;
+using Books.Models;
 using System.Text.Json;
 
-namespace books.Controllers;
+namespace Books.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class BooksController : ControllerBase
+public class BooksController(IBooksService service) : ControllerBase
 {
-    private readonly IBooksService _service;
-
-    public BooksController(IBooksService service)
-    {
-        _service = service;
-    }
-
     [HttpGet]
     [EndpointSummary("Paged Book Inforation")]
     [EndpointDescription("This returns all the books from our SQLite database, using EF Core")]
@@ -27,7 +20,7 @@ public class BooksController : ControllerBase
     {
         try
         {
-            var pagedResult = await _service.GetBooksAsync(pageSize, lastId, Url);
+            var pagedResult = await service.GetBooksAsync(pageSize, lastId, Url);
 
             var paginationMetadata = new
             {
@@ -47,9 +40,9 @@ public class BooksController : ControllerBase
 
             return Ok(pagedResult.Items);
         }
-        catch (Exception) 
+        catch (Exception )
         {
-            return StatusCode(500, "An error occurred while fetching event registrations.");
+            return StatusCode(500, "An error occurred while fetching books.");
         }
     }
 
@@ -67,19 +60,17 @@ public class BooksController : ControllerBase
 
         try
         {
-            var books = await _service.GetBookByIdAsync(id);
-
+            var books = await service.GetBookByIdAsync(id);
             if (books == null)
             {
                 return NotFound();
             }
 
-
             return Ok(books);
         }
-        catch (Exception)
+        catch (Exception )
         {
-            return StatusCode(500, "An error occurred while fetching event registration by Id.");
+            return StatusCode(500, "An error occurred while fetching a book by Id.");
         }
     }
 
@@ -96,10 +87,10 @@ public class BooksController : ControllerBase
         }
         try
         {
-            var createdBook = await _service.CreateBookAsync(bookDto);
+            var createdBook = await service.CreateBookAsync(bookDto);
             return CreatedAtAction(nameof(GetBookById), new { id = createdBook.Id }, createdBook);
         }
-        catch (Exception)
+        catch (Exception )
         {
             return StatusCode(500, "An error occurred while creating a new book.");
         }
