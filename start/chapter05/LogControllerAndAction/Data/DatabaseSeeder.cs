@@ -1,16 +1,13 @@
 using Bogus;
-using books.Models;
+using Books.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace books.Data;
+namespace Books.Data;
 
 public static class DatabaseSeeder
 {
-    public static void Initialize(IServiceProvider serviceProvider)
+    public static void Initialize(AppDbContext context)
     {
-        using (var context = new AppDbContext(
-            serviceProvider.GetRequiredService<DbContextOptions<AppDbContext>>()))
-        {
             if (context.Books.Any())
             {
                 return; 
@@ -24,10 +21,9 @@ public static class DatabaseSeeder
                 .RuleFor(b => b.Genre, f => f.PickRandom(new[] { "Fiction", "Non-fiction", "Science Fiction", "Mystery", "Romance", "Thriller" }))
                 .RuleFor(b => b.Summary, f => f.Lorem.Paragraph(3));
 
-            var books = faker.Generate(1000);  // Generate 100 fake books
+            var books = faker.Generate(1000); 
 
             context.Books.AddRange(books);
             context.SaveChanges();
-        }
     }
 }
