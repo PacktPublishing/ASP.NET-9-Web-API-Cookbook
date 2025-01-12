@@ -1,36 +1,89 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.HttpLogging;
+using Books.Data;
+using Books.Services;
+using Books.Repositories;
+using Scalar.AspNetCore;
 using Serilog;
-using Serilog.Events;
 
-namespace books;
+try {
 
-public class Program
+var builder = WebApplication.CreateBuilder(args);
+
+Log.Information("Starting Web API");
+
+builder.ConfigureLogging();
+
+builder.Services.AddCors(options =>
 {
-    public static void Main(string[] args)
+    options.AddDefaultPolicy(builder =>
     {
-        Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Information()
-		    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-		    .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
-		    .MinimumLevel.Override("Microsoft.AspNetCore.HttpLogging.HttpLoggingMiddleware", LogEventLevel.Information)
-		    .Enrich.FromLogContext()
-		    .WriteTo.Console()
-		    .WriteTo.Seq("http://localhost:5341")
-		    .CreateLogger();
-        try
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
-        finally
-        {
-            Log.CloseAndFlush();
-        }
+        builder.AllowAnyOrigin()
+               .AllowAnyHeader()
+               .AllowAnyMethod();
+    });
+});
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddOpenApi("chapter5");
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<IBooksRepository, BooksRepository>();
+builder.Services.AddScoped<IBooksService, BooksService>();
+builder.Services.AddHttpLogging(logging =>
+{
+    logging.LoggingFields = HttpLoggingFields.RequestMethod 
+        | HttpLoggingFields.RequestPath 
+        | HttpLoggingFields.RequestQuery
+        | HttpLoggingFields.RequestHeaders
+        | HttpLoggingFields.RequestBody
+        | HttpLoggingFields.ResponseStatusCode   
+        | HttpLoggingFields.ResponseHeaders
+        | HttpLoggingFields.ResponseBody;
+
+    logging.RequestHeaders.Add("Accept");
+    logging.ResponseHeaders.Add("WWW-Authenticate");
+    logging.MediaTypeOptions.AddText("application/javascript");
+
+    if (builder.Environment.IsDevelopment())
+    {
+        logging.RequestBodyLogLimit = 4096;
+        logging.ResponseBodyLogLimit = 4096;
+    }
+    else
+    {
+        logging.RequestBodyLogLimit = 1024;
+        logging.ResponseBodyLogLimit = 1024;
     }
 
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-        .UseSerilog()
-        .ConfigureWebHostDefaults(webBuilder =>
-        {
-                webBuilder.UseStartup<Startup>();
-        });
+    logging.CombineLogs = true;
+});
+
+var app = builder.Build();
+
+app.UseHttpLogging();
+app.UseResponseCaching();
+app.MapOpenApi();
+app.UseCors();
+app.UseRouting();
+app.MapControllers();
+app.MapScalarApiReference();
+
+using (var scope = app.Services.CreateScope()) 
+{
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    DatabaseSeeder.Initialize(context);
+}
+
+app.Run();
+} 
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Application start-up failed");
+    throw;
+}
+finally 
+{
+    Log.CloseAndFlush();
 }

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using books.Models;
+using Books.Models;
 
-namespace books.Data;
+namespace Books.Data;
 
 public class AppDbContext : DbContext
 {
