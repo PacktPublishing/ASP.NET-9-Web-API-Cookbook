@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeqWithSerilog", "SeqWithSerilog.csproj", "{B6B08DE3-795D-489F-A173-8CA33CBE65E6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnrichDiagnosticContext", "EnrichDiagnosticContext.csproj", "{B8DC0820-1E41-45E8-B38C-F54BCFEAE9FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,9 +14,9 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B6B08DE3-795D-489F-A173-8CA33CBE65E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B6B08DE3-795D-489F-A173-8CA33CBE65E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B6B08DE3-795D-489F-A173-8CA33CBE65E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B6B08DE3-795D-489F-A173-8CA33CBE65E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8DC0820-1E41-45E8-B38C-F54BCFEAE9FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8DC0820-1E41-45E8-B38C-F54BCFEAE9FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8DC0820-1E41-45E8-B38C-F54BCFEAE9FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8DC0820-1E41-45E8-B38C-F54BCFEAE9FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
