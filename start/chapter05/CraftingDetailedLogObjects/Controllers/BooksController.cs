@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Serilog.Context;
 using Books.Services;
 using Books.Models;
 using System.Text.Json;
@@ -7,7 +8,7 @@ namespace Books.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class BooksController(IBooksService service) : ControllerBase
+public class BooksController(IBooksService service, ILogger<BooksController> logger) : ControllerBase
 {
     [HttpGet]
     [EndpointSummary("Paged Book Inforation")]
@@ -18,6 +19,7 @@ public class BooksController(IBooksService service) : ControllerBase
 
     public async Task<IActionResult> GetBooks([FromQuery] int pageSize = 10, [FromQuery] int lastId = 0)
     {
+        using (LogContext.PushProperty("EndpointName", nameof(GetBooks)))
         try
         {
             var pagedResult = await service.GetBooksAsync(pageSize, lastId, Url);
@@ -38,10 +40,31 @@ public class BooksController(IBooksService service) : ControllerBase
 
             Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(paginationMetadata, options));
 
+            logger.LogInformation("Retrieved {BookCount} books. Pagination: {@paginationMetadata}", pagedResult.Items!.Count, paginationMetadata);
+
+            logger.LogInformation("Returning status code {StatusCode}", StatusCodes.Status200OK);
+
+            var logObject = new { 
+                QueryParameters = new { PageSize = pageSize, LastId = lastId },
+                PaginationMetadata = paginationMetadata, 
+                BookCount = pagedResult.Items!.Count, 
+                FirstBookId = pagedResult.Items.FirstOrDefault()?.Id, 
+                LastBookId = pagedResult.Items.LastOrDefault()?.Id, 
+                GenreCounts = pagedResult.Items.GroupBy(b => b.Genre)
+                    .Select(g => new { Genre = g.Key, Count = g.Count() 
+            })
+            };
+
+            logger.LogInformation("Books retrieved successfully. Details: {@BookOperationDetails}", logObject);
+
             return Ok(pagedResult.Items);
         }
-        catch (Exception )
+        catch (Exception ex)
         {
+            logger.LogError(ex, "Error occurred while fetching books. QueryParams: {@QueryParameters}", 
+                new { pageSize, lastId });
+            logger.LogInformation("Returning status code {StatusCode}", StatusCodes.Status500InternalServerError);
+
             return StatusCode(500, "An error occurred while fetching books.");
         }
     }

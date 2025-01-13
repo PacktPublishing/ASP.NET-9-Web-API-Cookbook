@@ -1,24 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
 using Serilog.Context;
-using books.Services;
-using books.Models;
+using Books.Services;
+using Books.Models;
 using System.Text.Json;
 
-namespace books.Controllers;
+namespace Books.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class BooksController : ControllerBase
+public class BooksController(IBooksService service, ILogger<BooksController> logger) : ControllerBase
 {
-    private readonly IBooksService _service;
-    private readonly ILogger<BooksController> _logger;
-
-    public BooksController(IBooksService service, ILogger<BooksController> logger)
-    {
-        _service = service;
-        _logger = logger;
-    }
-
     [HttpGet]
     [EndpointSummary("Paged Book Inforation")]
     [EndpointDescription("This returns all the books from our SQLite database, using EF Core")]
@@ -29,10 +20,9 @@ public class BooksController : ControllerBase
     public async Task<IActionResult> GetBooks([FromQuery] int pageSize = 10, [FromQuery] int lastId = 0)
     {
         using (LogContext.PushProperty("EndpointName", nameof(GetBooks)))
-        {
         try
         {
-            var pagedResult = await _service.GetBooksAsync(pageSize, lastId, Url);
+            var pagedResult = await service.GetBooksAsync(pageSize, lastId, Url);
 
             var paginationMetadata = new
             {
@@ -50,31 +40,32 @@ public class BooksController : ControllerBase
 
             Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(paginationMetadata, options));
 
-            _logger.LogInformation("Retrieved {BookCount} books. Pagination: {@paginationMetadata}", pagedResult.Items!.Count, paginationMetadata);
+            logger.LogInformation("Retrieved {BookCount} books. Pagination: {@paginationMetadata}", pagedResult.Items!.Count, paginationMetadata);
 
-            _logger.LogInformation("Returning status code {StatusCode}", StatusCodes.Status200OK);
+            logger.LogInformation("Returning status code {StatusCode}", StatusCodes.Status200OK);
 
             var logObject = new { 
-                QueryParameters = new { PageSize = pageSize, LastId = lastId },     PaginationMetadata = paginationMetadata, 
+                QueryParameters = new { PageSize = pageSize, LastId = lastId },
+                PaginationMetadata = paginationMetadata, 
                 BookCount = pagedResult.Items!.Count, 
                 FirstBookId = pagedResult.Items.FirstOrDefault()?.Id, 
                 LastBookId = pagedResult.Items.LastOrDefault()?.Id, 
                 GenreCounts = pagedResult.Items.GroupBy(b => b.Genre)
                     .Select(g => new { Genre = g.Key, Count = g.Count() 
             })
-};
-            _logger.LogInformation("Books retrieved successfully. Details: {@BookOperationDetails}", logObject);
+            };
+
+            logger.LogInformation("Books retrieved successfully. Details: {@BookOperationDetails}", logObject);
 
             return Ok(pagedResult.Items);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error occurred while fetching books. QueryParams: {@QueryParameters}", 
-            new { pageSize, lastId });
-		_logger.LogInformation("Returning status code {StatusCode}", StatusCodes.Status500InternalServerError);
+            logger.LogError(ex, "Error occurred while fetching books. QueryParams: {@QueryParameters}", 
+                new { pageSize, lastId });
+            logger.LogInformation("Returning status code {StatusCode}", StatusCodes.Status500InternalServerError);
 
-            return StatusCode(500, "An error occurred while fetching event registrations.");
-        }
+            return StatusCode(500, "An error occurred while fetching books.");
         }
     }
 
@@ -92,19 +83,17 @@ public class BooksController : ControllerBase
 
         try
         {
-            var books = await _service.GetBookByIdAsync(id);
-
+            var books = await service.GetBookByIdAsync(id);
             if (books == null)
             {
                 return NotFound();
             }
 
-
             return Ok(books);
         }
-        catch (Exception)
+        catch (Exception )
         {
-            return StatusCode(500, "An error occurred while fetching event registration by Id.");
+            return StatusCode(500, "An error occurred while fetching a book by Id.");
         }
     }
 
@@ -121,10 +110,10 @@ public class BooksController : ControllerBase
         }
         try
         {
-            var createdBook = await _service.CreateBookAsync(bookDto);
+            var createdBook = await service.CreateBookAsync(bookDto);
             return CreatedAtAction(nameof(GetBookById), new { id = createdBook.Id }, createdBook);
         }
-        catch (Exception)
+        catch (Exception )
         {
             return StatusCode(500, "An error occurred while creating a new book.");
         }
