@@ -1,53 +1,60 @@
+using Microsoft.EntityFrameworkCore;
+using Books.Data;
+using Books.Services;
+using Books.Repositories;
+using Scalar.AspNetCore;
 using Serilog;
-using Serilog.Events;
 
-namespace books;
+try {
 
-public class Program
+var builder = WebApplication.CreateBuilder(args);
+
+Log.Information("Starting Web API");
+
+builder.ConfigureLogging();
+
+builder.Services.AddCors(options =>
 {
-    public static void Main(string[] args)
+    options.AddDefaultPolicy(builder =>
     {
-        Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "logs"));
+        builder.AllowAnyOrigin()
+               .AllowAnyHeader()
+               .AllowAnyMethod();
+    });
+});
 
-        CreateHostBuilder(args).Build().Run();
-    }
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddOpenApi("chapter5");
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<IBooksRepository, BooksRepository>();
+builder.Services.AddScoped<IBooksService, BooksService>();
 
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .ConfigureAppConfiguration((hostingContext, config) =>
-            {
-                config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-                config.AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json", optional: true, reloadOnChange: true);
-                config.AddEnvironmentVariables();
-                config.AddCommandLine(args);
-            })
-            .UseSerilog((context, services, configuration) => configuration
-                    .ReadFrom.Configuration(context.Configuration)
-                    .ReadFrom.Services(services)
-                    .Enrich.FromLogContext()
-                    .WriteTo.Seq(
-                        serverUrl: GetSeqUrl(context.Configuration),
-                        apiKey: GetSeqApiKey(context.Configuration)))
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+var app = builder.Build();
 
-        private static string GetSeqUrl(IConfiguration configuration)
-        {
-            var seqUrl = configuration["Seq:Url"];
-            if (string.IsNullOrEmpty(seqUrl))
-            {
-                seqUrl = Environment.GetEnvironmentVariable("SEQ_URL");
-            }
+app.UseSerilogRequestLogging();
+app.UseResponseCaching();
+app.MapOpenApi();
+app.UseCors();
+app.UseRouting();
+app.MapControllers();
+app.MapScalarApiReference();
 
-            return string.IsNullOrEmpty(seqUrl) ? "http://localhost:5341" : seqUrl;
-        }
+using (var scope = app.Services.CreateScope()) 
+{
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    DatabaseSeeder.Initialize(context);
+}
 
-        private static string GetSeqApiKey(IConfiguration configuration)
-        {
-            return configuration["Seq:ApiKey"] ?? 
-                   Environment.GetEnvironmentVariable("SEQ_API_KEY") ?? 
-                   throw new InvalidOperationException("Seq API key not found.");
-        }
+app.Run();
+} 
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Application start-up failed");
+    throw;
+}
+finally 
+{
+    Log.CloseAndFlush();
 }
