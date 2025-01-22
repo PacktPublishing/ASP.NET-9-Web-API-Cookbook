@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using OpinionPoll.Data;
+
+namespace OpinionPoll.Hubs;
 
 public class VotingHub : Hub
 {

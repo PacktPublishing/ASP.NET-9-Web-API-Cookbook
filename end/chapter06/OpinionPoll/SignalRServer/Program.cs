@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using OpinionPoll.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
