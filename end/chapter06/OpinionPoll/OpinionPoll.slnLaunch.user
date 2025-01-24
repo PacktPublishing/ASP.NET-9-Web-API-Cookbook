@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "SignalRServer\\opinionPoll.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "SignalRConsoleClient\\signalRclient.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]
