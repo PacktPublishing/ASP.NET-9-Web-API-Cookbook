@@ -1,4 +1,7 @@
+using SignalRServer.Services;
 using Microsoft.AspNetCore.SignalR;
+
+namespace SignalRServer.Hubs;
 
 public class MessagingHub : Hub
 {
