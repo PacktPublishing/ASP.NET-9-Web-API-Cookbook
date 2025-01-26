@@ -18,6 +18,7 @@ public class AuthController(
 {
 
     [HttpGet("test")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     public IActionResult Test()
     {
         return Ok("AuthController is working!");
@@ -25,12 +26,16 @@ public class AuthController(
 
     [Authorize]
     [HttpGet("testAuth")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public IActionResult AuthTest()
     {
         return Ok("AuthController authorize is working!");
     }
 
     [HttpPost("register")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(object))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(IEnumerable<IdentityError>))]
     public async Task<IActionResult> Register([FromBody] RegisterModel model)
     {
         var user = new IdentityUser { UserName = model.Username, Email = model.Username };
@@ -44,6 +49,8 @@ public class AuthController(
     }
 
     [HttpPost("login")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Login([FromBody] LoginDTO model)
     {
         var user = await userManager.FindByNameAsync(model.Username);

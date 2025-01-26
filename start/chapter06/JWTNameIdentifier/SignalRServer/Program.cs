@@ -95,5 +95,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapOpenApi();
+app.MapScalarApiReference();
 
 app.Run();
