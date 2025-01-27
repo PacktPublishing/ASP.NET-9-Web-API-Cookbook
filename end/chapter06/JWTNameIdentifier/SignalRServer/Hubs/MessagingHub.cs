@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.SignalR;
 
+namespace SignalRServer.Hubs;
+
 public class MessagingHub : Hub
 {
     private readonly IUserConnectionManager _userConnectionManager;
