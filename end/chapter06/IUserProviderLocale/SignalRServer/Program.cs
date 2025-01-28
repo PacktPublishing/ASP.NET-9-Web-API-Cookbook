@@ -4,12 +4,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using SignalRServer.Data;
+using SignalRServer.Services;
+using SignalRServer.Hubs;
 using System.Text;
 using System.Security.Claims;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+builder.Services.AddOpenApi("chapter6");
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite("Data Source=./Data/Data.db"));
@@ -18,7 +22,6 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.Sign
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
-// Configure JWT
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 builder.Services.AddAuthentication(options => 
 {
@@ -40,7 +43,6 @@ builder.Services.AddAuthentication(options =>
             RoleClaimType = ClaimTypes.Role
         };
 
-        // Configure the JWT Bearer Token for SignalR
         options.Events = new JwtBearerEvents
         {
             OnMessageReceived = context =>
@@ -62,14 +64,12 @@ builder.Services.AddAuthorization(options =>
 });
 
 builder.Services.AddSingleton<IUserConnectionManager, UserConnectionManager>();
-
 builder.Services.AddSingleton<IUserIdProvider, LocaleUserIdProvider>();
 
 builder.Services.AddSignalR(hubOptions => 
 {
     hubOptions.EnableDetailedErrors = true;
 });
-
 
 
 var app = builder.Build();
@@ -104,13 +104,14 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapHub<MessagingHub>("/messagingHub");
 app.MapControllers();
+app.MapHub<MessagingHub>("/messagingHub");
+app.MapOpenApi();
+app.MapScalarApiReference();
 
 app.Run();

@@ -22,6 +22,7 @@
         <h2>Login</h2>
         <input type="text" id="loginUsername" placeholder="Username">
         <input type="password" id="loginPassword" placeholder="Password">
+        <input type="text" id="loginLocale" placeholder="Locale (e.g., en-US, fr-FR)">
         <button onclick="login()">Login</button>
     </div>
 
@@ -56,7 +57,6 @@
             const password = document.getElementById("registerPassword").value;
 
             try {
-                debugger;
                 const response = await fetch('https://localhost:7031/api/auth/register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -77,12 +77,13 @@
         async function login() {
             const username = document.getElementById("loginUsername").value;
             const password = document.getElementById("loginPassword").value;
+            const locale = document.getElementById("loginLocale").value || "en-US";
 
             try {
                 const response = await fetch('https://localhost:7031/api/auth/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password })
+                    body: JSON.stringify({ username, password, locale })
                 });
 
                 if (response.ok) {
@@ -118,7 +119,7 @@
                 .then(() => addMessage("Connected to the messaging hub."))
                 .catch(err => {
                     addMessage("Error connecting to hub: " + err);
-                    setTimeout(startConnection, 5000);
+                    setTimeout(startConnection, 5000); // Retry connection after 5 seconds
                 });
 
             connection.onclose(error => {

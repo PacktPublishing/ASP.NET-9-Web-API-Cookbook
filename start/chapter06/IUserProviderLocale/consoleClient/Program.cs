@@ -67,8 +67,14 @@ class BasicSignalRClient
         var username = Console.ReadLine();
         Console.Write("Enter password: ");
         var password = Console.ReadLine();
+        Console.Write("Enter locale (e.g., en-US, fr-FR) or press Enter for default: ");
+        var locale = Console.ReadLine();
+        if (string.IsNullOrWhiteSpace(locale))
+        {
+            locale = "en-US"; 
+        }
 
-        var response = await _httpClient.PostAsJsonAsync("https://localhost:7031/api/auth/login", new { username, password });
+        var response = await _httpClient.PostAsJsonAsync("https://localhost:7031/api/auth/login", new { username, password, locale });
         if (response.IsSuccessStatusCode)
         {
             var result = await response.Content.ReadAsStringAsync();

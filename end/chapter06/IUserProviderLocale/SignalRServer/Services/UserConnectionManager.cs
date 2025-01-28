@@ -1,5 +1,4 @@
-using Microsoft.AspNetCore.SignalR;
-using System.Security.Claims;
+namespace SignalRServer.Services;
 
 public class UserConnectionManager : IUserConnectionManager
 {
@@ -51,13 +50,15 @@ public class UserConnectionManager : IUserConnectionManager
             }
         }
 
-        public string GetConnectionId(string username)
+
+
+    public string GetConnectionId(string username)
+    {
+        lock (_connections)
         {
-            lock (_connections)
-            {
-                return _connections.TryGetValue(username, out HashSet<string> connections)
-                    ? connections.FirstOrDefault()
-                    : null;
-            }
+            return _connections.TryGetValue(username, out HashSet<string> connections)
+                ? connections.FirstOrDefault()
+                : null;
         }
+    }
 }
