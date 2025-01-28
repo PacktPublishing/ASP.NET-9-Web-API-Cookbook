@@ -1,5 +1,6 @@
-public class RegisterModel
-{
-    public string Username { get; set; } = string.Empty;
-    public string Password { get; set; } = string.Empty;
-}
+namespace SignalRServer.Models;
+
+public record RegisterModel(
+    string Username, 
+    string Password
+);

@@ -1,3 +1,5 @@
+namespace SignalRServer.Services;
+
 public interface IUserConnectionManager
 {
     void AddConnection(string username, string connectionId);

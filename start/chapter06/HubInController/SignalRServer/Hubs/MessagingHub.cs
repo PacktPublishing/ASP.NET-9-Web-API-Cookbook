@@ -1,18 +1,14 @@
 using Microsoft.AspNetCore.SignalR;
+using SignalRServer.Services;
 
-public class MessagingHub : Hub
+namespace SignalRServer.Hubs;
+
+public class MessagingHub(IUserConnectionManager userConnectionManager) : Hub 
 {
-    private readonly IUserConnectionManager _userConnectionManager;
-
-    public MessagingHub(IUserConnectionManager userConnectionManager)
-    {
-        _userConnectionManager = userConnectionManager;
-    }
-
-    public override async Task OnConnectedAsync()
+                                                                          public override async Task OnConnectedAsync()
     {
         var username = Context.UserIdentifier ?? "Anonymous";
-        _userConnectionManager.AddConnection(username, Context.ConnectionId);
+        userConnectionManager.AddConnection(username, Context.ConnectionId);
         await Clients.All.SendAsync("UserConnected", username);
         await base.OnConnectedAsync();
     }
@@ -20,7 +16,7 @@ public class MessagingHub : Hub
     public override async Task OnDisconnectedAsync(Exception exception)
     {
         var username = Context.UserIdentifier ?? "Anonymous";
-        _userConnectionManager.RemoveConnection(username, Context.ConnectionId);
+        userConnectionManager.RemoveConnection(username, Context.ConnectionId);
         await Clients.All.SendAsync("UserDisconnected", username);
         await base.OnDisconnectedAsync(exception);
     }
