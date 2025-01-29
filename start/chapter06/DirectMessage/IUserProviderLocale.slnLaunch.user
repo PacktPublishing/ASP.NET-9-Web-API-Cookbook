@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "SignalRServer\\IUserProviderLocale.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "consoleClient\\signalRclient.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

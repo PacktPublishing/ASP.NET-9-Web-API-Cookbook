@@ -1,7 +1,8 @@
-namespace SignalRServer.LoginModel;
+namespace SignalRServer.Models;
 
-public class LoginDTO
-{
-    public string Username { get; set; } = string.Empty;
-    public string Password { get; set; } = string.Empty;
-}
+public record LoginDTO
+(
+    string Username,
+    string Password,
+    string Locale = "en-US"
+);

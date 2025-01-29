@@ -51,7 +51,7 @@ class Program
 
         using (var client = new HttpClient())
         {
-            var response = await client.PostAsJsonAsync("https://localhost:5001/api/auth/login", new { username, password });
+            var response = await client.PostAsJsonAsync("https://localhost:7031/api/auth/login", new { username, password });
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadAsStringAsync();
@@ -71,7 +71,7 @@ class Program
     static async Task ConnectToHub()
     {
         _connection = new HubConnectionBuilder()
-            .WithUrl("https://localhost:5001/messagingHub", options =>
+            .WithUrl("https://localhost:7031/messagingHub", options =>
             {
                 options.AccessTokenProvider = () => Task.FromResult(_bearerToken)!;
             })
@@ -269,7 +269,7 @@ class Program
 
         using (var client = new HttpClient())
         {
-            var response = await client.PostAsJsonAsync("https://localhost:5001/api/auth/register", new { username, password });
+            var response = await client.PostAsJsonAsync("https://localhost:7031/api/auth/register", new { username, password });
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("Registration successful! You can now log in.");
