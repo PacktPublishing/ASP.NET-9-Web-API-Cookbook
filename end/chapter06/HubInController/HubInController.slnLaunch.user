@@ -3,11 +3,11 @@
     "Name": "New Profile",
     "Projects": [
       {
-        "Path": "SignalRServer\\JWTNameIdentifier.csproj",
+        "Path": "consoleClient\\signalRclient.csproj",
         "Action": "Start"
       },
       {
-        "Path": "consoleClient\\signalRclient.csproj",
+        "Path": "SignalRServer\\HubInController.csproj",
         "Action": "Start"
       }
     ]

@@ -5,7 +5,7 @@ namespace SignalRServer.Hubs;
 
 public class MessagingHub(IUserConnectionManager userConnectionManager) : Hub<IMessagingClient> 
 {
-                                                                          public override async Task OnConnectedAsync()
+    public override async Task OnConnectedAsync()
     {
         var username = Context.UserIdentifier ?? "Anonymous";
         userConnectionManager.AddConnection(username, Context.ConnectionId);
