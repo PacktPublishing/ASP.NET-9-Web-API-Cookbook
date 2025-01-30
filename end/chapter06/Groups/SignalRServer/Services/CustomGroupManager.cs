@@ -1,8 +1,10 @@
+#nullable enable
 namespace SignalRServer.Services;
 
-public class CustomGroupManager : ICustomGroupManager
+public class CustomGroupManager(Dictionary<string, HashSet<string>>? groupUserMap = null) : ICustomGroupManager
 {
-    private readonly Dictionary<string, HashSet<string>> _groupUserMap = new Dictionary<string, HashSet<string>>();
+    private readonly Dictionary<string, HashSet<string>> _groupUserMap = 
+        groupUserMap ?? new Dictionary<string, HashSet<string>>();
 
     public Task AddUserToGroup(string username, string groupName)
     {

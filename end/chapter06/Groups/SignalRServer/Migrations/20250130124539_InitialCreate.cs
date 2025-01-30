@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace opinionPoll.Migrations
+namespace messaging.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
@@ -58,7 +58,7 @@ namespace opinionPoll.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Choice = table.Column<int>(type: "INTEGER", nullable: false),
                     Timestamp = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    ConnectionId = table.Column<string>(type: "TEXT", nullable: false)
+                    ConnectionId = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {

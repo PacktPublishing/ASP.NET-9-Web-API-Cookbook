@@ -1,3 +1,5 @@
+namespace SignalRServer.Hubs;
+
 public interface IMessagingClient
 {
     Task ReceiveMessage(string user, string message);

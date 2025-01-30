@@ -3,17 +3,11 @@ using Microsoft.AspNetCore.Authorization;
 using SignalRServer.Services;
 using System.Security.Claims;
 
+namespace SignalRServer.Hubs;
+
 [Authorize]
-public class MessagingHub : Hub<IMessagingClient>
+public class MessagingHub(IUserConnectionManager userConnectionManager, ICustomGroupManager groupManager) : Hub<IMessagingClient>
 {
-    private readonly IUserConnectionManager _userConnectionManager;
-    private readonly ICustomGroupManager _groupManager;
-
-    public MessagingHub(IUserConnectionManager userConnectionManager, ICustomGroupManager groupManager) { 
-	    _userConnectionManager = userConnectionManager; 
-	    _groupManager = groupManager; 
-    }
-
     public override async Task OnConnectedAsync()
     {
         var username = Context.User?.FindFirst(ClaimTypes.Name)?.Value 
@@ -21,7 +15,7 @@ public class MessagingHub : Hub<IMessagingClient>
 
         if (!string.IsNullOrEmpty(username))
         {
-            _userConnectionManager.AddConnection(username, Context.ConnectionId);
+            userConnectionManager.AddConnection(username, Context.ConnectionId);
             await Clients.All.UserConnected(username);
             Console.WriteLine($"User connected: {username}");
         }
@@ -37,7 +31,7 @@ public class MessagingHub : Hub<IMessagingClient>
         var username = Context.User?.FindFirst(ClaimTypes.Name)?.Value 
             ?? Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-        _userConnectionManager.RemoveConnection(username!, Context.ConnectionId);
+        userConnectionManager.RemoveConnection(username!, Context.ConnectionId);
         await Clients.All.UserDisconnected(username);
         await base.OnDisconnectedAsync(exception);
     }
@@ -57,7 +51,7 @@ public class MessagingHub : Hub<IMessagingClient>
 
         Console.WriteLine($"Attempting to send message from {senderUsername} to {targetUsername}");
 
-        var targetConnectionIds = _userConnectionManager.GetConnections(targetUsername).ToList();
+        var targetConnectionIds = userConnectionManager.GetConnections(targetUsername).ToList();
         Console.WriteLine($"Found {targetConnectionIds.Count} connection(s) for {targetUsername}");
 
         if (targetConnectionIds.Any())
@@ -83,8 +77,6 @@ public class MessagingHub : Hub<IMessagingClient>
         await Clients.Group(groupName).ReceiveGroupMessage(senderUsername, groupName, message);
     }
 
-
-
     public string GetConnectionId()
     {
         return Context.ConnectionId;
@@ -93,8 +85,8 @@ public class MessagingHub : Hub<IMessagingClient>
     [Authorize(Roles = "Admin")]
     public async Task AddUserToGroup(string username, string groupName)
     {
-        await _groupManager.AddUserToGroup(username, groupName);
-        var connectionIds = _userConnectionManager.GetConnections(username);
+        await groupManager.AddUserToGroup(username, groupName);
+        var connectionIds = userConnectionManager.GetConnections(username);
         foreach (var connectionId in connectionIds)
         {
             await Groups.AddToGroupAsync(connectionId, groupName);
@@ -105,13 +97,12 @@ public class MessagingHub : Hub<IMessagingClient>
     [Authorize(Roles = "Admin")]
     public async Task RemoveUserFromGroup(string username, string groupName)
     {
-        await _groupManager.RemoveUserFromGroup(username, groupName);
-        var connectionIds = _userConnectionManager.GetConnections(username);
+        await groupManager.RemoveUserFromGroup(username, groupName);
+        var connectionIds = userConnectionManager.GetConnections(username);
         foreach (var connectionId in connectionIds)
         {
             await Groups.RemoveFromGroupAsync(connectionId, groupName);
         }
         await Clients.All.UserRemovedFromGroup(username, groupName);
     }
-
 }

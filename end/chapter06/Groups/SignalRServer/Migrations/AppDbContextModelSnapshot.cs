@@ -7,7 +7,7 @@ using SignalRServer.Data;
 
 #nullable disable
 
-namespace opinionPoll.Migrations
+namespace messaging.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -15,7 +15,7 @@ namespace opinionPoll.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -219,7 +219,6 @@ namespace opinionPoll.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ConnectionId")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Timestamp")

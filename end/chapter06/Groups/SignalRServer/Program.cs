@@ -6,6 +6,7 @@ using SignalRServer.Data;
 using System.Text;
 using System.Security.Claims;
 using SignalRServer.Services;
+using SignalRServer.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
