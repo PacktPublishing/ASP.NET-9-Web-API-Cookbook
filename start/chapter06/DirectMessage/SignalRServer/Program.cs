@@ -64,7 +64,6 @@ builder.Services.AddAuthorization(options =>
 });
 
 builder.Services.AddSingleton<IUserConnectionManager, UserConnectionManager>();
-builder.Services.AddSingleton<IUserIdProvider, LocaleUserIdProvider>();
 
 builder.Services.AddSignalR(hubOptions => 
 {

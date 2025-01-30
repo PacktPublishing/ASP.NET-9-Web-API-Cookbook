@@ -90,11 +90,6 @@ class Program
         {
             Console.WriteLine($"[Direct] {user}: {message}");
         });
-        _connection.On<string, string, string>("ReceiveGroupMessage", (user, group, message) =>
-        {
-            Console.WriteLine($"{user} in {group}: {message}");
-        });
-
         _connection.On<string>("UserConnected", (user) =>
         {
             Console.WriteLine($"{user} connected");
@@ -125,10 +120,8 @@ class Program
         Console.WriteLine("\nChoose an option:");
         Console.WriteLine("1. Send message to all");
         Console.WriteLine("2. Send direct message");
-        Console.WriteLine("3. Send group message");
-        Console.WriteLine("4. Add user to group (Admin only)");
-        Console.WriteLine("5. Remove user from group (Admin only)");
-        Console.WriteLine("6. Logout");
+        Console.WriteLine("3. Register a new user");
+        Console.WriteLine("4. Log out");
 
         var choice = Console.ReadLine();
 
@@ -141,18 +134,9 @@ class Program
                 await SendDirectMessage();
                 break;
             case "3":
-                await SendGroupMessage();
-                break;
-            case "4":
-                await AddUserToGroup();
-                break;
-            case "5":
-                await RemoveUserFromGroup();
-                break;
-            case "6":
                 await Register();
                 break;
-            case "7":
+            case "4":
                 Logout();
                 break;
             default:

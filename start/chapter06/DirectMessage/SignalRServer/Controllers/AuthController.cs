@@ -60,7 +60,7 @@ public class AuthController(
         if (user is not null && await userManager.CheckPasswordAsync(user, model.Password))
         {
             var userRoles = await userManager.GetRolesAsync(user);
-            var token = GenerateJwtToken(user.UserName, userRoles, model.Locale);
+            var token = GenerateJwtToken(user.UserName, userRoles);
             
             await hubContext.AnnounceUserLogin(model.Username);
             return Ok(new { token, user.UserName, Roles = userRoles });
@@ -68,7 +68,7 @@ public class AuthController(
         return Unauthorized("Invalid username or password");
     }
 
-    private string GenerateJwtToken(string userName, IList<string> roles, string locale)
+    private string GenerateJwtToken(string userName, IList<string> roles)
     {
         var secret = configuration["Jwt:Key"] ?? 
             throw new ApplicationException("JWT Key configuration is not set");
@@ -89,7 +89,6 @@ public class AuthController(
         {
             new Claim(ClaimTypes.Name, userName),
             new Claim(ClaimTypes.NameIdentifier, userName),
-            new Claim("locale", locale),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 

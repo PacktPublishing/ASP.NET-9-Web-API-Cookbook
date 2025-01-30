@@ -1,3 +1,5 @@
+namespace SignalRServer.Services;
+
 public class UserConnectionManager : IUserConnectionManager
 {
     private readonly Dictionary<string, HashSet<string>> _connections = new Dictionary<string, HashSet<string>>();
@@ -33,23 +35,6 @@ public class UserConnectionManager : IUserConnectionManager
         }
     }
 
-
-        public IEnumerable<string> GetConnections(string username)
-        {
-            lock (_connections)
-            {
-                if (_connections.TryGetValue(username, out HashSet<string> connections))
-                {
-                    Console.WriteLine($"Found {connections.Count} connections for user {username}");
-                    return connections.ToList();
-                }
-                Console.WriteLine($"No connections found for user {username}");
-                return Enumerable.Empty<string>();
-            }
-        }
-
-
-
     public string GetConnectionId(string username)
     {
         lock (_connections)
@@ -57,6 +42,20 @@ public class UserConnectionManager : IUserConnectionManager
             return _connections.TryGetValue(username, out HashSet<string> connections)
                 ? connections.FirstOrDefault()
                 : null;
+        }
+    }
+
+    public IEnumerable<string> GetConnections(string username)
+    {
+        lock (_connections)
+        {
+            if (_connections.TryGetValue(username, out HashSet<string> connections))
+            {
+                Console.WriteLine($"Found {connections.Count} connections for user {username}");
+                return connections.ToList();
+            }
+            Console.WriteLine($"No connections found for user {username}");
+            return Enumerable.Empty<string>();
         }
     }
 }

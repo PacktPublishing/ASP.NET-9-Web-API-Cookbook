@@ -1,3 +1,4 @@
+Here is my entire index.html: file
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,9 +30,6 @@
         <h2>Send Message</h2>
         <button onclick="sendMessageToAll()">Send to All</button>
         <button onclick="sendDirectMessage()">Send Direct Message</button>
-        <button onclick="sendGroupMessage()">Send Group Message</button>
-        <button onclick="addUserToGroup()">Add User to Group (Admin)</button>
-        <button onclick="removeUserFromGroup()">Remove User from Group (Admin)</button>
         <button onclick="logout()">Logout</button>
     </div>
     <div id="registerSection">
@@ -143,7 +141,7 @@
             const message = prompt("Enter message:");
             if (message) {
                 try {
-                    await connection.invoke("SendToAll", message);
+                    await connection.invoke("SendMessage", message);
                 } catch (err) {
                     addMessage("Error sending message: " + err);
                 }

@@ -1,14 +1,19 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using SignalRServer.Data;
+using SignalRServer.Services;
+using SignalRServer.Hubs;
 using System.Text;
 using System.Security.Claims;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+builder.Services.AddOpenApi("chapter6");
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite("Data Source=./Data/Data.db"));
@@ -98,7 +103,6 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseAuthentication();
@@ -106,5 +110,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapHub<MessagingHub>("/messagingHub");
+app.MapOpenApi();
+app.MapScalarApiReference();
 
 app.Run();
