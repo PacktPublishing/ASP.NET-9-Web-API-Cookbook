@@ -10,8 +10,9 @@ public class MessagingHub(IUserConnectionManager userConnectionManager, ICustomG
 {
     public override async Task OnConnectedAsync()
     {
-        var username = Context.User?.FindFirst(ClaimTypes.Name)?.Value 
-            ?? Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var username = Context.User?.FindFirst(ClaimTypes.Name)?.Value
+            ?? Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value 
+            ?? "Unknown User";
 
         if (!string.IsNullOrEmpty(username))
         {
@@ -38,16 +39,17 @@ public class MessagingHub(IUserConnectionManager userConnectionManager, ICustomG
 
     public async Task SendToAll(string message)
     {
-        var username = Context.User?.FindFirst(ClaimTypes.Name)?.Value 
-            ?? Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var username = Context.User?.FindFirst(ClaimTypes.Name)?.Value
+            ?? Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value 
+            ?? "Unknown User";
 
         await Clients.All.ReceiveMessage(username, message);
     }
 
     public async Task SendToIndividual(string targetUsername, string message)
     {
-        var senderUsername = Context.User?.FindFirst(ClaimTypes.Name)?.Value 
-            ?? Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var senderUsername = Context.User?.FindFirst(ClaimTypes.Name)?.Value      ?? Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value 
+            ?? "Unknown User";
 
         Console.WriteLine($"Attempting to send message from {senderUsername} to {targetUsername}");
 
@@ -71,8 +73,9 @@ public class MessagingHub(IUserConnectionManager userConnectionManager, ICustomG
 
     public async Task SendToGroup(string groupName, string message)
     {
-        var senderUsername = Context.User?.FindFirst(ClaimTypes.Name)?.Value 
-            ?? Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var senderUsername = Context.User?.FindFirst(ClaimTypes.Name)?.Value
+        ?? Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value
+        ?? "Unknown User";
 
         await Clients.Group(groupName).ReceiveGroupMessage(senderUsername, groupName, message);
     }

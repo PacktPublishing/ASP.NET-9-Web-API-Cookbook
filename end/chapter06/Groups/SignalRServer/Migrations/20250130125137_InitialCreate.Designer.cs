@@ -11,7 +11,7 @@ using SignalRServer.Data;
 namespace messaging.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250130124539_InitialCreate")]
+    [Migration("20250130125137_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -43,7 +43,7 @@ namespace messaging.Migrations
                         .IsUnique()
                         .HasDatabaseName("RoleNameIndex");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("AspNetRoles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

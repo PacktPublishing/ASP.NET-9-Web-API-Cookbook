@@ -55,8 +55,8 @@ public class UserConnectionManager : IUserConnectionManager
         lock (_connections)
         {
             return _connections.TryGetValue(username, out HashSet<string> connections)
-                ? connections.FirstOrDefault()
-                : null;
+                ? connections.FirstOrDefault() ?? string.Empty
+                : string.Empty;
         }
     }
 }
