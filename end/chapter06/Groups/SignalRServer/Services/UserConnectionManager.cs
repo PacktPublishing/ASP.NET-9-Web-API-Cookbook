@@ -1,3 +1,5 @@
+namespace SignalRServer.Services;
+
 public class UserConnectionManager : IUserConnectionManager
 {
     private readonly Dictionary<string, HashSet<string>> _connections = new Dictionary<string, HashSet<string>>();

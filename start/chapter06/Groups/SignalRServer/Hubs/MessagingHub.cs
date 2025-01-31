@@ -1,24 +1,22 @@
 using Microsoft.AspNetCore.SignalR; 
 using Microsoft.AspNetCore.Authorization; 
+using SignalRServer.Services;
 using System.Security.Claims;
 
+namespace SignalRServer.Hubs;
+
 [Authorize]
-public class MessagingHub : Hub<IMessagingClient>
+public class MessagingHub(IUserConnectionManager userConnectionManager) : Hub<IMessagingClient>
 {
-    private readonly IUserConnectionManager _userConnectionManager;
-
-    public MessagingHub(IUserConnectionManager userConnectionManager) { 
-	    _userConnectionManager = userConnectionManager; 
-    }
-
     public override async Task OnConnectedAsync()
     {
-        var username = Context.User?.FindFirst(ClaimTypes.Name)?.Value 
-            ?? Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var username = Context.User?.FindFirst(ClaimTypes.Name)?.Value
+            ?? Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value 
+            ?? "Unknown User";
 
         if (!string.IsNullOrEmpty(username))
         {
-            _userConnectionManager.AddConnection(username, Context.ConnectionId);
+            userConnectionManager.AddConnection(username, Context.ConnectionId);
             await Clients.All.UserConnected(username);
             Console.WriteLine($"User connected: {username}");
         }
@@ -34,27 +32,28 @@ public class MessagingHub : Hub<IMessagingClient>
         var username = Context.User?.FindFirst(ClaimTypes.Name)?.Value 
             ?? Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-        _userConnectionManager.RemoveConnection(username!, Context.ConnectionId);
+        userConnectionManager.RemoveConnection(username!, Context.ConnectionId);
         await Clients.All.UserDisconnected(username);
         await base.OnDisconnectedAsync(exception);
     }
 
     public async Task SendToAll(string message)
     {
-        var username = Context.User?.FindFirst(ClaimTypes.Name)?.Value 
-            ?? Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var username = Context.User?.FindFirst(ClaimTypes.Name)?.Value
+            ?? Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value 
+            ?? "Unknown User";
 
         await Clients.All.ReceiveMessage(username, message);
     }
 
     public async Task SendToIndividual(string targetUsername, string message)
     {
-        var senderUsername = Context.User?.FindFirst(ClaimTypes.Name)?.Value 
-            ?? Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var senderUsername = Context.User?.FindFirst(ClaimTypes.Name)?.Value      ?? Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value 
+            ?? "Unknown User";
 
         Console.WriteLine($"Attempting to send message from {senderUsername} to {targetUsername}");
 
-        var targetConnectionIds = _userConnectionManager.GetConnections(targetUsername).ToList();
+        var targetConnectionIds = userConnectionManager.GetConnections(targetUsername).ToList();
         Console.WriteLine($"Found {targetConnectionIds.Count} connection(s) for {targetUsername}");
 
         if (targetConnectionIds.Any())
@@ -71,7 +70,6 @@ public class MessagingHub : Hub<IMessagingClient>
             Console.WriteLine($"User {targetUsername} is not connected");
         }
     }
-
 
     public string GetConnectionId()
     {

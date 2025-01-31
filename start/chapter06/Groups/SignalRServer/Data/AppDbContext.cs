@@ -16,7 +16,6 @@ namespace SignalRServer.Data
             base.OnModelCreating(builder);
 
             builder.Entity<IdentityUser>().ToTable("Users");
-            builder.Entity<IdentityRole>().ToTable("Roles");
         }
     }
 }

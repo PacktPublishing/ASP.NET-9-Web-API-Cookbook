@@ -1,3 +1,5 @@
+namespace SignalRServer.Services;
+
 public class UserConnectionManager : IUserConnectionManager
 {
     private readonly Dictionary<string, HashSet<string>> _connections = new Dictionary<string, HashSet<string>>();
@@ -55,8 +57,8 @@ public class UserConnectionManager : IUserConnectionManager
         lock (_connections)
         {
             return _connections.TryGetValue(username, out HashSet<string> connections)
-                ? connections.FirstOrDefault()
-                : null;
+                ? connections.FirstOrDefault() ?? string.Empty
+                : string.Empty;
         }
     }
 }

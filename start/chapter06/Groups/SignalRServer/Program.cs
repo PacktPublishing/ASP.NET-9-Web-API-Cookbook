@@ -5,10 +5,14 @@ using Microsoft.IdentityModel.Tokens;
 using SignalRServer.Data;
 using System.Text;
 using System.Security.Claims;
+using SignalRServer.Services;
+using SignalRServer.Hubs;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+builder.Services.AddOpenApi("chapter6");
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite("Data Source=./Data/Data.db"));
@@ -106,5 +110,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapHub<MessagingHub>("/messagingHub");
+app.MapOpenApi();
+app.MapScalarApiReference();
 
 app.Run();
