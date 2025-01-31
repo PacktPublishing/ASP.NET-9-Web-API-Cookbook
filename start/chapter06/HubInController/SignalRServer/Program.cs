@@ -85,7 +85,7 @@ using (var scope = app.Services.CreateScope())
         await roleManager.CreateAsync(new IdentityRole("Admin"));
     }
 
-    if (await userManager.FindByNameAsync("admin@example.com") == null)
+    if (await userManager.FindByNameAsync("adamTheAdmin") == null)
     {
         var adminUser = new IdentityUser
         {
