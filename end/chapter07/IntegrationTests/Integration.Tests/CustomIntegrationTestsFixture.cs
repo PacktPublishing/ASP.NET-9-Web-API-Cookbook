@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using books;
-using books.Data;
+using Books.Data;
 using System.Net.Http;
 using Microsoft.AspNetCore.Hosting;
 

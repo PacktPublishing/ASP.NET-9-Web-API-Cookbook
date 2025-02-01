@@ -1,8 +1,8 @@
 using Bogus;
-using books.Models;
+using Books.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace books.Data;
+namespace Books.Data;
 
 public static class DatabaseSeeder
 {

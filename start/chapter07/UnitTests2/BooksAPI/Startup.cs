@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Serilog;
-using books.Data;
-using books.Services;
-using books.Repositories;
+using Books.Data;
+using Books.Services;
+using Books.Repositories;
 
 namespace books;
 

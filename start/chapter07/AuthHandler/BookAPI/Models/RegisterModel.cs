@@ -1,4 +1,4 @@
-namespace books.Models;
+namespace Books.Models;
 
 public class RegisterModel
 {

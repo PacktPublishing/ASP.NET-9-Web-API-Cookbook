@@ -1,7 +1,7 @@
 using FluentAssertions.AspNetCore.Mvc;
 using books.Controllers;
-using books.Services;
-using books.Models;
+using Books.Services;
+using Books.Models;
 using NSubstitute;
 using Microsoft.AspNetCore.Mvc;
 

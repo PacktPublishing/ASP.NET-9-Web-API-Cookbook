@@ -5,9 +5,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Identity;
 using System.Text;
 using Serilog;
-using books.Data;
-using books.Services;
-using books.Repositories;
+using Books.Data;
+using Books.Services;
+using Books.Repositories;
 
 namespace books;
 

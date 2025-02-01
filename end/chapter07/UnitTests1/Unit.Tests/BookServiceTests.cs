@@ -1,7 +1,7 @@
 using Xunit;
-using books.Repositories;
-using books.Models;
-using books.Services;
+using Books.Repositories;
+using Books.Models;
+using Books.Services;
 
 namespace Tests.Services; 
 

@@ -1,5 +1,5 @@
-using books.Data;
-using books.Models;
+using Books.Data;
+using Books.Models;
 
 namespace Tests.Integration;
 

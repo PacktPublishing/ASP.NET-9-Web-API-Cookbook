@@ -1,6 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
-using books.Models;
+using Books.Models;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;

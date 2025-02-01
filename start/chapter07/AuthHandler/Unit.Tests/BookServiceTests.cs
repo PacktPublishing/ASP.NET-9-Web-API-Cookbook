@@ -3,10 +3,10 @@ using AutoFixture;
 using AutoFixture.AutoNSubstitute;
 using AutoFixture.Xunit2;
 using FluentAssertions;
-using books.Repositories;
+using Books.Repositories;
 using NSubstitute;
-using books.Models;
-using books.Services;
+using Books.Models;
+using Books.Services;
 using Microsoft.AspNetCore.Mvc;
 
 
