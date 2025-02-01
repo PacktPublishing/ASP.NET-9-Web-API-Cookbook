@@ -1,8 +1,8 @@
-using books.Repositories;
-using books.Models;
+using Books.Repositories;
+using Books.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace books.Services;
+namespace Books.Services;
 
 public class BooksService : IBooksService
 {

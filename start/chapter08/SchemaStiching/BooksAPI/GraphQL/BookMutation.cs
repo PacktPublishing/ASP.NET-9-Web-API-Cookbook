@@ -1,5 +1,5 @@
-using books.Models;
-using books.Services;
+using Books.Models;
+using Books.Services;
 using HotChocolate;
 using HotChocolate.Subscriptions;
 using HotChocolate.Types;

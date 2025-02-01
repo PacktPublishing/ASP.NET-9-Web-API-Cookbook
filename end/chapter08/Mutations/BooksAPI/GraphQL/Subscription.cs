@@ -1,4 +1,4 @@
-using books.Models;
+using Books.Models;
 
 namespace books.GraphQL;
 
