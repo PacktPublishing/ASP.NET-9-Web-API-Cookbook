@@ -17,7 +17,7 @@ public class BooksController : ControllerBase
     }
 
     [HttpGet]
-    [EndpointSummary("Paged Book Inforation")]
+    [EndpointSummary("Paged Book Information")]
     [EndpointDescription("This returns all the books from our SQLite database, using EF Core")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IReadOnlyCollection<BookDTO>))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -53,7 +53,7 @@ public class BooksController : ControllerBase
         }
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:int}")]
     [EndpointSummary("Get a book by Id")]
     [EndpointDescription("Returns a single book by its Id from our SQLite database, using EF Core")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BookDTO))]

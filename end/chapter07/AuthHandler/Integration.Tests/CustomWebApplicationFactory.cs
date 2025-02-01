@@ -17,7 +17,7 @@ using Microsoft.Extensions.Logging;
 
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
-    private DbConnection _connection;
+    private DbConnection? _connection;
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {

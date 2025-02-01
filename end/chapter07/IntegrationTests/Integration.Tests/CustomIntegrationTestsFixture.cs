@@ -11,7 +11,7 @@ namespace Tests.Integration;
 
 public class CustomIntegrationTestsFixture : WebApplicationFactory<Program>
 {
-    private SqliteConnection _connection;
+    private SqliteConnection? _connection;
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {

@@ -9,7 +9,6 @@
   <ItemGroup>
     <PackageReference Include="Bogus" Version="35.6.0" />
     <PackageReference Include="Dapper" Version="2.1.35" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0-preview.6.24328.4" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="*" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="*">

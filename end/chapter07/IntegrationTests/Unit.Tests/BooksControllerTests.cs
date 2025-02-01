@@ -1,5 +1,3 @@
-using Xunit;
-using AutoFixture.Xunit2;
 using FluentAssertions.AspNetCore.Mvc;
 using books.Controllers;
 using books.Services;
@@ -23,12 +21,13 @@ public class BooksControllerTests
         var controller = new BooksController(booksService);
 
         // Act
-        var result = await controller.GetBookById(testBookId);
+        IActionResult result = await controller.GetBookById(testBookId);
 
         // Assert
-        result.Should().BeOkObjectResult()
-              .WithValue(bookDto)
-              .WithStatusCode(StatusCodes.Status200OK);
+        result.Should()
+            .BeOkObjectResult()
+            .WithValueEquivalentTo<BookDTO>(bookDto);
+
     }
 
     
