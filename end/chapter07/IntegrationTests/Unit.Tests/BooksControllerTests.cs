@@ -4,7 +4,6 @@ using books.Services;
 using books.Models;
 using NSubstitute;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
 
 [Collection("BooksController Tests")]
 public class BooksControllerTests
