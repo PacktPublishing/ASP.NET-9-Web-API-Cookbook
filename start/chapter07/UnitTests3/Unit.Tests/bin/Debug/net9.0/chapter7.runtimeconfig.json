@@ -4,11 +4,11 @@
     "frameworks": [
       {
         "name": "Microsoft.NETCore.App",
-        "version": "9.0.0-rc.1.24431.7"
+        "version": "9.0.0"
       },
       {
         "name": "Microsoft.AspNetCore.App",
-        "version": "9.0.0-rc.1.24452.1"
+        "version": "9.0.0"
       }
     ],
     "configProperties": {

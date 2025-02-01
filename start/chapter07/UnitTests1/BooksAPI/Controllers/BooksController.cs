@@ -53,7 +53,7 @@ public class BooksController : ControllerBase
         }
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:int}")]
     [EndpointSummary("Get a book by Id")]
     [EndpointDescription("Returns a single book by its Id from our SQLite database, using EF Core")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BookDTO))]

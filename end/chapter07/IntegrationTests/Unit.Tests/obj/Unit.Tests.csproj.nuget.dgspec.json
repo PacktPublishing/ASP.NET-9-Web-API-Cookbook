@@ -194,17 +194,17 @@
             },
             "coverlet.collector": {
               "target": "Package",
-              "version": "[6.0.2, )"
+              "version": "[6.0.4, )"
             },
             "xunit": {
               "target": "Package",
-              "version": "[2.9.2, )"
+              "version": "[2.9.3, )"
             },
             "xunit.runner.visualstudio": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[3.0.0-pre.49, )"
+              "version": "[3.0.1, )"
             }
           },
           "imports": [

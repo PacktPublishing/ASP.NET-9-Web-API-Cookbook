@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "LYYnjyrYRdI=",
+  "dgSpecHash": "xrAuLCjjjDc=",
   "success": true,
   "projectFilePath": "C:\\my-coding-projects\\officialPacktRepo\\ASP.NET-9-Web-API-Cookbook\\end\\chapter07\\UnitTests2\\Unit.Tests\\Unit.Tests.csproj",
   "expectedPackageFiles": [
@@ -135,5 +135,16 @@
     "C:\\Users\\laved\\.nuget\\packages\\xunit.extensibility.execution\\2.9.2\\xunit.extensibility.execution.2.9.2.nupkg.sha512",
     "C:\\Users\\laved\\.nuget\\packages\\xunit.runner.visualstudio\\3.0.0-pre.49\\xunit.runner.visualstudio.3.0.0-pre.49.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1904",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'System.Text.Encodings.Web' 4.5.0 has a known critical severity vulnerability, https://github.com/advisories/GHSA-ghhp-997w-qr28",
+      "libraryId": "System.Text.Encodings.Web",
+      "targetGraphs": [
+        "net9.0"
+      ]
+    }
+  ]
 }

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "DhLgey7E3bo=",
+  "dgSpecHash": "AyQqOR24WTg=",
   "success": true,
   "projectFilePath": "C:\\my-coding-projects\\officialPacktRepo\\ASP.NET-9-Web-API-Cookbook\\end\\chapter07\\IntegrationTests\\Unit.Tests\\Unit.Tests.csproj",
   "expectedPackageFiles": [
@@ -9,7 +9,7 @@
     "C:\\Users\\laved\\.nuget\\packages\\autofixture.xunit2\\5.0.0-preview0011\\autofixture.xunit2.5.0.0-preview0011.nupkg.sha512",
     "C:\\Users\\laved\\.nuget\\packages\\bogus\\35.6.1\\bogus.35.6.1.nupkg.sha512",
     "C:\\Users\\laved\\.nuget\\packages\\castle.core\\5.1.1\\castle.core.5.1.1.nupkg.sha512",
-    "C:\\Users\\laved\\.nuget\\packages\\coverlet.collector\\6.0.2\\coverlet.collector.6.0.2.nupkg.sha512",
+    "C:\\Users\\laved\\.nuget\\packages\\coverlet.collector\\6.0.4\\coverlet.collector.6.0.4.nupkg.sha512",
     "C:\\Users\\laved\\.nuget\\packages\\dapper\\2.1.35\\dapper.2.1.35.nupkg.sha512",
     "C:\\Users\\laved\\.nuget\\packages\\fare\\2.2.1\\fare.2.2.1.nupkg.sha512",
     "C:\\Users\\laved\\.nuget\\packages\\fluentassertions\\6.0.0\\fluentassertions.6.0.0.nupkg.sha512",
@@ -118,14 +118,14 @@
     "C:\\Users\\laved\\.nuget\\packages\\system.text.regularexpressions\\4.3.1\\system.text.regularexpressions.4.3.1.nupkg.sha512",
     "C:\\Users\\laved\\.nuget\\packages\\system.threading\\4.3.0\\system.threading.4.3.0.nupkg.sha512",
     "C:\\Users\\laved\\.nuget\\packages\\system.threading.tasks\\4.3.0\\system.threading.tasks.4.3.0.nupkg.sha512",
-    "C:\\Users\\laved\\.nuget\\packages\\xunit\\2.9.2\\xunit.2.9.2.nupkg.sha512",
+    "C:\\Users\\laved\\.nuget\\packages\\xunit\\2.9.3\\xunit.2.9.3.nupkg.sha512",
     "C:\\Users\\laved\\.nuget\\packages\\xunit.abstractions\\2.0.3\\xunit.abstractions.2.0.3.nupkg.sha512",
-    "C:\\Users\\laved\\.nuget\\packages\\xunit.analyzers\\1.16.0\\xunit.analyzers.1.16.0.nupkg.sha512",
-    "C:\\Users\\laved\\.nuget\\packages\\xunit.assert\\2.9.2\\xunit.assert.2.9.2.nupkg.sha512",
-    "C:\\Users\\laved\\.nuget\\packages\\xunit.core\\2.9.2\\xunit.core.2.9.2.nupkg.sha512",
-    "C:\\Users\\laved\\.nuget\\packages\\xunit.extensibility.core\\2.9.2\\xunit.extensibility.core.2.9.2.nupkg.sha512",
-    "C:\\Users\\laved\\.nuget\\packages\\xunit.extensibility.execution\\2.9.2\\xunit.extensibility.execution.2.9.2.nupkg.sha512",
-    "C:\\Users\\laved\\.nuget\\packages\\xunit.runner.visualstudio\\3.0.0-pre.49\\xunit.runner.visualstudio.3.0.0-pre.49.nupkg.sha512"
+    "C:\\Users\\laved\\.nuget\\packages\\xunit.analyzers\\1.18.0\\xunit.analyzers.1.18.0.nupkg.sha512",
+    "C:\\Users\\laved\\.nuget\\packages\\xunit.assert\\2.9.3\\xunit.assert.2.9.3.nupkg.sha512",
+    "C:\\Users\\laved\\.nuget\\packages\\xunit.core\\2.9.3\\xunit.core.2.9.3.nupkg.sha512",
+    "C:\\Users\\laved\\.nuget\\packages\\xunit.extensibility.core\\2.9.3\\xunit.extensibility.core.2.9.3.nupkg.sha512",
+    "C:\\Users\\laved\\.nuget\\packages\\xunit.extensibility.execution\\2.9.3\\xunit.extensibility.execution.2.9.3.nupkg.sha512",
+    "C:\\Users\\laved\\.nuget\\packages\\xunit.runner.visualstudio\\3.0.1\\xunit.runner.visualstudio.3.0.1.nupkg.sha512"
   ],
   "logs": []
 }

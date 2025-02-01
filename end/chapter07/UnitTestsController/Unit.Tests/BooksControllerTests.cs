@@ -1,12 +1,9 @@
-using Xunit;
-using AutoFixture.Xunit2;
 using FluentAssertions.AspNetCore.Mvc;
 using books.Controllers;
 using books.Services;
 using books.Models;
 using NSubstitute;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
 
 [Collection("BooksController Tests")]
 public class BooksControllerTests
@@ -23,12 +20,13 @@ public class BooksControllerTests
         var controller = new BooksController(booksService);
 
         // Act
-        var result = await controller.GetBookById(testBookId);
+        IActionResult result = await controller.GetBookById(testBookId);
 
         // Assert
-        result.Should().BeOkObjectResult()
-              .WithValue(bookDto)
-              .WithStatusCode(StatusCodes.Status200OK);
+        result.Should()
+            .BeOkObjectResult()
+            .WithValueEquivalentTo<BookDTO>(bookDto);
+
     }
 
     
@@ -49,3 +47,4 @@ public class BooksControllerTests
         result.Should().BeNotFoundResult();
     }
 }
+
