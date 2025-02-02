@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "chapter8", "BooksAPI\chapter8.csproj", "{157E7D97-DC91-4C69-A81B-B0F94C0AAA2B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pagination", "BooksAPI\pagination.csproj", "{D1B45CB8-D94F-4E44-8526-7A4D446C317E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,9 +14,9 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{157E7D97-DC91-4C69-A81B-B0F94C0AAA2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{157E7D97-DC91-4C69-A81B-B0F94C0AAA2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{157E7D97-DC91-4C69-A81B-B0F94C0AAA2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{157E7D97-DC91-4C69-A81B-B0F94C0AAA2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1B45CB8-D94F-4E44-8526-7A4D446C317E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1B45CB8-D94F-4E44-8526-7A4D446C317E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1B45CB8-D94F-4E44-8526-7A4D446C317E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1B45CB8-D94F-4E44-8526-7A4D446C317E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

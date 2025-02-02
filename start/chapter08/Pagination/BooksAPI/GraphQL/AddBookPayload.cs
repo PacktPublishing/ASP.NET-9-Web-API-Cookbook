@@ -1,13 +1,13 @@
 using Books.Models;
 
-namespace books.GraphQL;
+namespace Books.GraphQL;
 
 public class AddBookPayload
 {
-	public BookDTO? Book { get; }
+    public BookDTO? Book { get; }
 
-	public AddBookPayload(BookDTO book)
-	{
-		Book = book;
-	}
+    public AddBookPayload(BookDTO book)
+    {
+         Book = book;
+    }
 }

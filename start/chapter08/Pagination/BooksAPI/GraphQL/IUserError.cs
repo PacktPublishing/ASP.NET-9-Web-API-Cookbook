@@ -1,8 +1,7 @@
-namespace books.GraphQL
+namespace Books.GraphQL;
+
+public interface IUserError  
 {
-    public interface IUserError
-    {
-        string Message { get; }
-        string Code { get; }
-    }
+    string Message { get; }
+    string Code { get; }
 }
