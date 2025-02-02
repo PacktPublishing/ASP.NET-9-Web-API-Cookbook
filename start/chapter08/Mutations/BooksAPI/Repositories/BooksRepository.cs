@@ -65,4 +65,9 @@ public class BooksRepository : IBooksRepository
         await _context.SaveChangesAsync();
         return true;
     }
+
+    public async Task<Book?> GetBookByISBNAsync(string isbn)
+    {
+            return await _context.Books.FirstOrDefaultAsync(b => b.ISBN == isbn);
+    }
 }

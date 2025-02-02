@@ -8,4 +8,5 @@ public interface IBooksService
     Task<PagedResult<BookDTO>> GetBooksAsync(int pageSize, int lastId, IUrlHelper urlHelper);
     Task<BookDTO?> GetBookByIdAsync(int id);
     Task<BookDTO> CreateBookAsync(BookDTO bookDTO);
+    Task<bool> BookExistsAsync(string isbn);
 }

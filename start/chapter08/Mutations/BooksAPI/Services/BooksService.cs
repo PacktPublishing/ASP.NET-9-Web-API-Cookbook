@@ -85,4 +85,10 @@ public class BooksService : IBooksService
             Summary = result.Summary
         };
     }
+
+    public async Task<bool> BookExistsAsync(string isbn)
+    {
+        var book = await _repository.GetBookByISBNAsync(isbn);
+        return book != null;
+    }
 }
