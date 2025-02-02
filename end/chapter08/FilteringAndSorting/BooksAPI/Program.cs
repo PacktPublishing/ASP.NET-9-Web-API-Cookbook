@@ -49,7 +49,9 @@ try
         .AddSubscriptionType<Subscription>()
         .AddInMemorySubscriptions()
         .AddMutationConventions()
-        .AddErrorInterfaceType<IUserError>();
+        .AddErrorInterfaceType<IUserError>()
+        .AddFiltering()
+        .AddSorting();
 
     var app = builder.Build();
 
