@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Books.Services;
 using Books.Models;
+using Books.GraphQL;
 using System.Text.Json;
 using HotChocolate.Subscriptions;
-using books.GraphQL;
 
 namespace Books.Controllerss;
 
@@ -12,12 +12,12 @@ namespace Books.Controllerss;
 public class BooksController : ControllerBase
 {
     private readonly IBooksService _service;
-    private readonly ITopicEventSender _eventSender;
+    private readonly ITopicEventSender _eventSender = null!;
 
-    public BooksController(IBooksService booksService, ITopicEventSender eventSender)
+    public BooksController(IBooksService service, ITopicEventSender eventSender)
     {
-            _service = booksService ?? throw new ArgumentNullException(nameof(booksService));
-            _eventSender = eventSender ?? throw new ArgumentNullException(nameof(eventSender));
+        _service = service ?? throw new ArgumentNullException(nameof(service));
+        _eventSender = eventSender ?? throw new ArgumentNullException(nameof(eventSender));
     }
 
     [HttpGet]

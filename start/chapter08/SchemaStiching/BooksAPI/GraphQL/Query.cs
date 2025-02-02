@@ -1,15 +1,13 @@
 using Books.Models;
 using Books.Services;
 
-namespace books.GraphQL;
+namespace Books.GraphQL;
 
-public class Query { 
-	[UsePaging(IncludeTotalCount = true)]         
-	[UseFiltering]         
-	[UseSorting]         
-	public IQueryable<BookDTO> GetBooks([Service] IBooksService booksService) {             
-        return booksService.GetBooks();         
-	}     
+public class Query
+{
+    [UseFiltering]
+    [UseSorting]
+    public IQueryable<BookDTO> GetBooks([Service] IBooksService booksService) {
+        return booksService.GetBooks();
+    }
 } 
-
-

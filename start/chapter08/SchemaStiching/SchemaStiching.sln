@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "chapter8", "BooksAPI\chapter8.csproj", "{5BFAC323-CB19-40EF-AB57-78F6C512F2DF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "schemaStitching", "BooksAPI\schemaStitching.csproj", "{2A11F57C-8483-4555-BE18-DB8F1CFA7BF1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,9 +14,9 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5BFAC323-CB19-40EF-AB57-78F6C512F2DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5BFAC323-CB19-40EF-AB57-78F6C512F2DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5BFAC323-CB19-40EF-AB57-78F6C512F2DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5BFAC323-CB19-40EF-AB57-78F6C512F2DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A11F57C-8483-4555-BE18-DB8F1CFA7BF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A11F57C-8483-4555-BE18-DB8F1CFA7BF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A11F57C-8483-4555-BE18-DB8F1CFA7BF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A11F57C-8483-4555-BE18-DB8F1CFA7BF1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

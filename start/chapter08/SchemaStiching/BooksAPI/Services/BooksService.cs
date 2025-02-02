@@ -92,17 +92,17 @@ public class BooksService : IBooksService
         return book != null;
     }
 
-    public IQueryable<BookDTO> GetBooks() { 
+    public IQueryable<BookDTO> GetBooks() {
         return _repository.GetBooksAsQueryable()
-            .Select(b => new BookDTO        
-            {             
-                Id = b.Id,
-                Title = b.Title,
-                Author = b.Author,
-                PublicationDate = b.PublicationDate,
-                ISBN = b.ISBN,
-                Genre = b.Genre,             
-                Summary = b.Summary         
-             });
-           }
+            .Select(b => new BookDTO
+            {
+             Id = b.Id,
+             Title = b.Title,
+             Author = b.Author,
+             PublicationDate = b.PublicationDate,
+             ISBN = b.ISBN,
+             Genre = b.Genre,
+             Summary = b.Summary
+            });
+    }
 }

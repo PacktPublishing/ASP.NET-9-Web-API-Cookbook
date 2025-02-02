@@ -1,11 +1,10 @@
 using Books.Models;
+namespace Books.GraphQL;
 
-namespace books.GraphQL;
-
-public class Subscription 
+public class Subscription
 {
     [Topic]
     [Subscribe]
     public BookDTO OnNewBookAdded([EventMessage] BookDTO book) => book;
 
-}
+} 
