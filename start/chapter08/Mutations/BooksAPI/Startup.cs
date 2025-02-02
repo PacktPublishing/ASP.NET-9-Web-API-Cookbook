@@ -3,9 +3,8 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Serilog;
 using Books.Data;
 using Books.Services;
-using Books.Models;
 using Books.Repositories;
-using books.GraphQL;
+using Books.GraphQL;
 
 namespace books;
 
@@ -31,11 +30,6 @@ public class Startup
         });
 
         services.AddControllers();
-        services.AddGraphQLServer()
-            .AddQueryType<Query>()
-            .AddSubscriptionType<Subscription>()
-            .AddInMemorySubscriptions();
-
         services.AddEndpointsApiExplorer();
 
         services.AddDbContext<AppDbContext>(options =>
@@ -43,6 +37,10 @@ public class Startup
 
         services.AddScoped<IBooksRepository, BooksRepository>();
         services.AddScoped<IBooksService, BooksService>();
+        services.AddGraphQLServer()
+            .AddQueryType<Query>()
+            .AddSubscriptionType<Subscription>()
+            .AddInMemorySubscriptions();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
@@ -67,7 +65,6 @@ public class Startup
         app.UseResponseCaching();
         app.UseCors();
         app.UseRouting();
-
         app.UseWebSockets();
 
         app.UseEndpoints(endpoints =>
@@ -77,5 +74,7 @@ public class Startup
         });
 
         DatabaseSeeder.Initialize(serviceProvider);
+
+        
     }
 }
