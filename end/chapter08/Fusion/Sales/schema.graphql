@@ -1,0 +1,52 @@
+﻿schema {
+  query: Query
+}
+
+"An order in the system"
+type Order {
+  "The unique identifier of the order"
+  id: Int!
+  "The customer's email address"
+  customerEmail: String!
+  "When the order was placed"
+  orderDate: DateTime!
+  "The total amount of the order"
+  total: Decimal!
+  "The individual line items in the order"
+  lines: [OrderLine!]!
+}
+
+"A line item in an order"
+type OrderLine {
+  "The unique identifier of the order line"
+  id: Int!
+  "The ID of the book that was ordered"
+  bookId: Int!
+  "The quantity ordered"
+  quantity: Int!
+  "The price per unit at time of order"
+  unitPrice: Decimal!
+  orderId: Int!
+  order: Order!
+}
+
+type Query {
+  "Get all orders"
+  orders: [Order!]! @cost(weight: "10")
+  "Get a specific order by ID"
+  orderById(id: Int!): Order @cost(weight: "10")
+  "Get orders by customer email"
+  ordersByCustomer(email: String!): [Order!]! @cost(weight: "10")
+}
+
+"The purpose of the `cost` directive is to define a `weight` for GraphQL types, fields, and arguments. Static analysis can use these weights when calculating the overall cost of a query or response."
+directive @cost("The `weight` argument defines what value to add to the overall cost for every appearance, or possible appearance, of a type, field, argument, etc." weight: String!) on SCALAR | OBJECT | FIELD_DEFINITION | ARGUMENT_DEFINITION | ENUM | INPUT_FIELD_DEFINITION
+
+"The `@specifiedBy` directive is used within the type system definition language to provide a URL for specifying the behavior of custom scalar definitions."
+directive @specifiedBy("The specifiedBy URL points to a human-readable specification. This field will only read a result for scalar types." url: String!) on SCALAR
+
+"The `DateTime` scalar represents an ISO-8601 compliant date time type."
+scalar DateTime @specifiedBy(url: "https:\/\/www.graphql-scalars.com\/date-time")
+
+"The `Decimal` scalar type represents a decimal floating-point number."
+scalar Decimal
