@@ -65,3 +65,4 @@ C:\my-coding-projects\officialPacktRepo\ASP.NET-9-Web-API-Cookbook\end\chapter09
 C:\my-coding-projects\officialPacktRepo\ASP.NET-9-Web-API-Cookbook\end\chapter09\mapAPI\obj\Debug\net9.0\mapAPI.pdb
 C:\my-coding-projects\officialPacktRepo\ASP.NET-9-Web-API-Cookbook\end\chapter09\mapAPI\obj\Debug\net9.0\mapAPI.genruntimeconfig.cache
 C:\my-coding-projects\officialPacktRepo\ASP.NET-9-Web-API-Cookbook\end\chapter09\mapAPI\obj\Debug\net9.0\ref\mapAPI.dll
+C:\my-coding-projects\officialPacktRepo\ASP.NET-9-Web-API-Cookbook\end\chapter09\mapAPI\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
