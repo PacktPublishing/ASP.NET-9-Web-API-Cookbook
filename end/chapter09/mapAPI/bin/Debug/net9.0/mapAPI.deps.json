@@ -8,20 +8,20 @@
     ".NETCoreApp,Version=v9.0": {
       "mapAPI/1.0.0": {
         "dependencies": {
-          "Microsoft.AspNetCore.OpenApi": "9.0.0-rc.2.24474.3"
+          "Microsoft.AspNetCore.OpenApi": "9.0.1"
         },
         "runtime": {
           "mapAPI.dll": {}
         }
       },
-      "Microsoft.AspNetCore.OpenApi/9.0.0-rc.2.24474.3": {
+      "Microsoft.AspNetCore.OpenApi/9.0.1": {
         "dependencies": {
           "Microsoft.OpenApi": "1.6.17"
         },
         "runtime": {
           "lib/net9.0/Microsoft.AspNetCore.OpenApi.dll": {
-            "assemblyVersion": "9.0.0.0",
-            "fileVersion": "9.0.24.47403"
+            "assemblyVersion": "9.0.1.0",
+            "fileVersion": "9.0.124.61009"
           }
         }
       },
@@ -41,12 +41,12 @@
       "serviceable": false,
       "sha512": ""
     },
-    "Microsoft.AspNetCore.OpenApi/9.0.0-rc.2.24474.3": {
+    "Microsoft.AspNetCore.OpenApi/9.0.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-dh/zL60xpz9F07Ph86yEGPH2iHk9Ar9Nq8xuPk5jNVZP8ywVkZcsfOTo8GPV00/ZI/VCzTnSw+9rbsxO2KqyIQ==",
-      "path": "microsoft.aspnetcore.openapi/9.0.0-rc.2.24474.3",
-      "hashPath": "microsoft.aspnetcore.openapi.9.0.0-rc.2.24474.3.nupkg.sha512"
+      "sha512": "sha512-xRJe8UrLnOGs6hOBrT/4r74q97626H0mABb/DV0smlReIx6uQCENAe+TUqF6hD3NtT4sB+qrvWhAej6kxPxgew==",
+      "path": "microsoft.aspnetcore.openapi/9.0.1",
+      "hashPath": "microsoft.aspnetcore.openapi.9.0.1.nupkg.sha512"
     },
     "Microsoft.OpenApi/1.6.17": {
       "type": "package",
