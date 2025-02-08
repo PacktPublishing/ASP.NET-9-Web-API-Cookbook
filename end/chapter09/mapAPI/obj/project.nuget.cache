@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "akZDeprLwvs=",
+  "dgSpecHash": "qFLqyTV7yOI=",
   "success": true,
-  "projectFilePath": "C:\\my-coding-projects\\mapAPI\\mapAPI.csproj",
+  "projectFilePath": "C:\\my-coding-projects\\officialPacktRepo\\ASP.NET-9-Web-API-Cookbook\\end\\chapter09\\mapAPI\\mapAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\laved\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.1\\microsoft.aspnetcore.openapi.9.0.1.nupkg.sha512",
     "C:\\Users\\laved\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512"

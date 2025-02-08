@@ -81,11 +81,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\my-coding-projects\\mapAPI\\mapAPI.csproj",
+      "projectUniqueName": "C:\\my-coding-projects\\officialPacktRepo\\ASP.NET-9-Web-API-Cookbook\\end\\chapter09\\mapAPI\\mapAPI.csproj",
       "projectName": "mapAPI",
-      "projectPath": "C:\\my-coding-projects\\mapAPI\\mapAPI.csproj",
+      "projectPath": "C:\\my-coding-projects\\officialPacktRepo\\ASP.NET-9-Web-API-Cookbook\\end\\chapter09\\mapAPI\\mapAPI.csproj",
       "packagesPath": "C:\\Users\\laved\\.nuget\\packages\\",
-      "outputPath": "C:\\my-coding-projects\\mapAPI\\obj\\",
+      "outputPath": "C:\\my-coding-projects\\officialPacktRepo\\ASP.NET-9-Web-API-Cookbook\\end\\chapter09\\mapAPI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
