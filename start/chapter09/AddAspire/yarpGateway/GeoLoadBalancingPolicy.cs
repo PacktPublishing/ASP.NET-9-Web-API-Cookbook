@@ -78,6 +78,14 @@ public class GeoLoadBalancingPolicy : ILoadBalancingPolicy
             }
         }
 
+        var remoteIp = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+
+        if (remoteIp == "::1" || remoteIp == "127.0.0.1")
+        {
+            _logger.LogInformation("Local development detected, using default region");
+            return "8.8.8.8";
+        }
+
         // Fallback to direct connection
         return context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
     }
