@@ -10,7 +10,3 @@ builder.AddProject<Projects.YarpGateway>("gateway")
     .WithReference(apApi);
 
 builder.Build().Run();
-
-builder.AddProject<Projects.YarpGateway>("gateway");
-
-builder.Build().Run();
