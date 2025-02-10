@@ -70,6 +70,7 @@ public class Program
             app.UseCors();
             app.UseRouting();
             app.UseWebSockets();
+            app.MapDefaultEndpoints();
             app.MapControllers();
 
             // Initialize database

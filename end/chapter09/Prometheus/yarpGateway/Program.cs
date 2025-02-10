@@ -87,8 +87,6 @@ catch (Exception ex)
 
 var app = builder.Build();
 
-app.UseHttpsRedirection();
-
 if (app.Environment.IsDevelopment())
 {
     app.MapGet("/debug/config", (IConfiguration configuration) =>
@@ -159,7 +157,9 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+app.UseRouting();
+app.MapDefaultEndpoints();
+app.UseHttpsRedirection();
 app.UseCors();
 app.MapReverseProxy();
-
 app.Run();
