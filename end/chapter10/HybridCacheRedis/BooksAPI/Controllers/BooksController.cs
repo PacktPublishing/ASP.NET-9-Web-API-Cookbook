@@ -12,14 +12,20 @@ public class BooksController : ControllerBase
 {
     private readonly IBooksService _service;
     private readonly HybridCache _cache;
+    private readonly ICacheKeyTracker _keyTracker;
     private readonly ILogger<BooksController> _logger;
 
-    public BooksController(IBooksService booksService, HybridCache cache, ILogger<BooksController> logger)
-    {
+    public BooksController(
+            IBooksService booksService,
+            HybridCache cache,
+            ICacheKeyTracker keyTracker,
+            ILogger<BooksController> logger)
+        {
             _service = booksService ?? throw new ArgumentNullException(nameof(booksService));
             _cache = cache ?? throw new ArgumentNullException(nameof(cache));
-            _logger = logger;
-    }
+            _keyTracker = keyTracker ?? throw new ArgumentNullException(nameof(keyTracker));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
 
     [HttpGet]
     [EndpointSummary("Paged Book Information")]
@@ -31,53 +37,47 @@ public class BooksController : ControllerBase
         try
         {
             string cacheKey = $"GetBooks_{pageSize}_{lastId}";
-            var cacheEntryOptions = new HybridCacheEntryOptions
-        {
-            Expiration = TimeSpan.FromMinutes(5),       // L2 cache expiration
-            LocalCacheExpiration = TimeSpan.FromMinutes(2) // L1 cache expiration
-        };
-        var tags = new List<string> { "GetBooks" };
+            _keyTracker.TrackKey(cacheKey);
 
-        var pagedResult = await _cache.GetOrCreateAsync(
-            cacheKey,
-            async cancellationToken =>
+            var cacheEntryOptions = new HybridCacheEntryOptions 
             {
-                _logger.LogInformation("Fetching books from database.");
-            await Task.Delay(5000);
-
-             // Fetch data from the service
-                var result = await _service.GetBooksAsync(pageSize, lastId, Url);
-
-                return result;
-            },
-            cacheEntryOptions,
-            tags,
-            cancellationToken: HttpContext.RequestAborted);
-
-            pagedResult = await _service.GetBooksAsync(pageSize, lastId, Url);
-
-            var paginationMetadata = new
-            {
-                pagedResult.PageSize,
-                pagedResult.HasPreviousPage,
-                pagedResult.HasNextPage,
-                pagedResult.PreviousPageUrl,
-                pagedResult.NextPageUrl,
+                Expiration = TimeSpan.FromMinutes(3),
+                LocalCacheExpiration = TimeSpan.FromMinutes(1)
             };
 
-            var options = new JsonSerializerOptions
+            var pagedResult = await _cache.GetOrCreateAsync(
+                cacheKey,
+                async token =>
+                {
+                    _logger.LogInformation("Fetching books from database.");
+                    await Task.Delay(5000);
+                    return await _service.GetBooksAsync(pageSize, lastId, Url);
+                },
+                cacheEntryOptions,
+                cancellationToken: HttpContext.RequestAborted);
+
+                var paginationMetadata = new
+                {
+                    pagedResult.PageSize,
+                    pagedResult.HasPreviousPage,
+                    pagedResult.HasNextPage,
+                    pagedResult.PreviousPageUrl,
+                    pagedResult.NextPageUrl,
+                };
+
+                var options = new JsonSerializerOptions
+                {
+                    Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+                };
+
+                Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(paginationMetadata, options));
+
+                return Ok(pagedResult.Items);
+            }
+            catch (Exception) 
             {
-                Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
-            };
-
-            Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(paginationMetadata, options));
-
-            return Ok(pagedResult.Items);
-        }
-        catch (Exception) 
-        {
-            return StatusCode(500, "An error occurred while fetching event registrations.");
-        }
+                return StatusCode(500, "An error occurred while fetching event registrations.");
+            }
     }
 
     [HttpGet("{id}")]
@@ -123,7 +123,11 @@ public class BooksController : ControllerBase
         try
         {
             var createdBook = await _service.CreateBookAsync(bookDto);
-            await _cache.RemoveByTagAsync("GetBooks");
+            var keys = _keyTracker.GetKeys();
+            if (keys.Any())
+            {
+                await _cache.RemoveAsync(keys);
+            }
 
             Response.Headers.Append("X-Books-Modified", "true");
 

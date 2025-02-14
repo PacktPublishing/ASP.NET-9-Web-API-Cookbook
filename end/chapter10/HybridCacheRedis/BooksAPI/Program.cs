@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Hybrid;
 using Books.Data;
 using Books.Services;
 using Books.Repositories;
@@ -11,9 +12,21 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.Services.AddSingleton<ICacheKeyTracker, CacheKeyTracker>();
         builder.AddRedisClient(connectionName: "cache");
         builder.AddRedisDistributedCache(connectionName: "cache");
-        builder.Services.AddHybridCache();
+
+        #pragma warning disable EXTEXP0018
+        builder.Services.AddHybridCache(options => 
+        {
+            options.MaximumPayloadBytes = 1024 * 1024;
+            options.DefaultEntryOptions = new HybridCacheEntryOptions
+            {
+                Expiration = TimeSpan.FromMinutes(5),
+                LocalCacheExpiration = TimeSpan.FromMinutes(2)
+            };
+        });
+        #pragma warning restore EXTEXP0018
 
         builder.AddServiceDefaults();
 
