@@ -33,10 +33,9 @@ public class AuthenticationTests : IClassFixture<CustomWebApplicationFactory>
 
         // Act
         var response = await client.GetAsync("/api/Auth/testAuth");
-        response.IsSuccessStatusCode.Should().BeTrue("the request should be successful");
 
-        var content = await response.Content.ReadAsStringAsync();
-
+        response.Should().Be200Ok()
+            .And.MatchInContent("AuthController authorize is working!");
     }
 
     [Fact]
@@ -47,10 +46,9 @@ public class AuthenticationTests : IClassFixture<CustomWebApplicationFactory>
 
         // Act
         var response = await client.GetAsync("/api/Auth/testAuth");
-        response.IsSuccessStatusCode.Should().BeTrue("the request should be successful");
 
-        var content = await response.Content.ReadAsStringAsync();
-
+        response.Should().Be200Ok()
+            .And.MatchInContent("AuthController authorize is working!");
     }
 
     [Fact]
@@ -64,34 +62,21 @@ public class AuthenticationTests : IClassFixture<CustomWebApplicationFactory>
         // Act
         TestLogger.Log("Sending request to /api/Books/claims");
         var response = await client.GetAsync("/api/Books/claims");
+
+
         TestLogger.Log($"Response received. Status code: {response.StatusCode}");
-
-        var content = await response.Content.ReadAsStringAsync();
-        TestLogger.Log("Claims content returned:");
-        TestLogger.Log(content);
-
-        // Assert
-        response.IsSuccessStatusCode.Should().BeTrue("the request should be successful");
-
-        using (JsonDocument document = JsonDocument.Parse(content))
-        {
-            var root = document.RootElement;
-
-            root.GetProperty("isAuthenticated").GetBoolean().Should().BeTrue("the user should be authenticated");
-            root.GetProperty("authenticationType").GetString().Should().Be("Test", "the authentication type should match the test scheme");
-            root.GetProperty("name").GetString().Should().Be("testuser123", "the name should match the test user");
-
-            var claims = root.GetProperty("claims");
-            claims.GetArrayLength().Should().Be(2, "there should be two claims");
-
-            var claimValues = claims.EnumerateArray()
-                                    .Select(c => c.GetProperty("value").GetString())
-                                    .ToList();
-
-            claimValues.Should().AllBe("testuser123", "all claim values should be 'testuser123'");
-        }
-
-        TestLogger.Log("All assertions passed successfully");
+        response.Should().Be200Ok()
+            .And.BeAs(new
+            {
+                isAuthenticated = true,
+                authenticationType = "Test",
+                name = "testuser123",
+                claims = new[]
+                {
+                    new { type="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name", value= "testuser123"},
+                    new { type="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", value= "testuser123"},
+                }
+            });
     }
 
 
@@ -101,10 +86,16 @@ public class AuthenticationTests : IClassFixture<CustomWebApplicationFactory>
         var client = _factory.CreateAuthenticatedClient();
 
         var response = await client.GetAsync("/api/Books/claims");
-        var content = await response.Content.ReadAsStringAsync();
-        response.IsSuccessStatusCode.Should().BeTrue();
-        TestLogger.Log("Claims content returned...");
-        TestLogger.Log(content);
+
+        response.Should().Be200Ok()
+           .And.BeAs(new
+           {
+               claims = new[]
+               {
+                    new { type="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name", value= "testuser123"},
+                    new { type="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", value= "testuser123"},
+               }
+           });
     }
 
     [Fact]
@@ -118,24 +109,15 @@ public class AuthenticationTests : IClassFixture<CustomWebApplicationFactory>
         var response = await client.GetAsync("/api/Books/hi");
         TestLogger.Log($"Response received. Status code: {response.StatusCode}");
 
-        var content = await response.Content.ReadAsStringAsync();
-        TestLogger.Log($"Response content: {content}");
-
-        // Log response headers
-        TestLogger.Log("Response headers:");
-        foreach (var header in response.Headers)
-        {
-            TestLogger.Log($"{header.Key}: {string.Join(", ", header.Value)}");
-        }
-
-        // Assert
-        TestLogger.Log("Starting assertions");
-        response.IsSuccessStatusCode.Should().BeTrue($"Expected successful status code, but got {response.StatusCode}");
-        content.Should().Contain("#", $"Expected content to contain '#', but got: {content}");
-        content.Should().NotBe("Hello ", $"Expected content to not be exactly 'Hello ', but got: {content}");
-        content.Should().MatchRegex(@"Hello #\w+", $"Expected content to match 'Hello #<word>', but got: {content}");
-        content.Should().Be($"Hello #testuser123");
-        TestLogger.Log("Assertions completed");
+        response.Should().Be200Ok()
+            .And.Satisfy(async response =>
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                content.Should().Contain("#", $"Expected content to contain '#', but got: {content}");
+                content.Should().NotBe("Hello ", $"Expected content to not be exactly 'Hello ', but got: {content}");
+                content.Should().MatchRegex(@"Hello #\w+", $"Expected content to match 'Hello #<word>', but got: {content}");
+                content.Should().Be($"Hello #testuser123");
+            });
     }
 
     [Fact]
@@ -150,19 +132,7 @@ public class AuthenticationTests : IClassFixture<CustomWebApplicationFactory>
         var response = await client.GetAsync("/api/Books/hi");
         Console.WriteLine($"Response received. Status code: {response.StatusCode}");
 
-        var content = await response.Content.ReadAsStringAsync();
-        Console.WriteLine($"Response content: {content}");
-
-        // Log response headers
-        Console.WriteLine("Response headers:");
-        foreach (var header in response.Headers)
-        {
-            Console.WriteLine($"{header.Key}: {string.Join(", ", header.Value)}");
-        }
-
-        // Assert
-        response.IsSuccessStatusCode.Should().BeTrue($"Expected successful status code, but got {response.StatusCode}");
-        content.Should().Contain("Hello", $"Expected content to contain 'Hello', but got: {content}");
+        response.Should().Be200Ok().And.MatchInContent("*Hello*");
     }
 
     [Fact]
@@ -171,9 +141,27 @@ public class AuthenticationTests : IClassFixture<CustomWebApplicationFactory>
         var client = _factory.CreateClientWithJwtAuth("testuser123", new[] { "Admin", "User" });
 
         var response = await client.GetAsync("/api/Books/claims");
-        var content = await response.Content.ReadAsStringAsync();
-        response.IsSuccessStatusCode.Should().BeTrue();
-        TestLogger.Log("Claims content returned...");
-        TestLogger.Log(content);
+
+        response.Should().Be200Ok()
+            .And.Satisfy(givenModelStructure: new
+            {
+                isAuthenticated = default(bool),
+                authenticationType = default(string),
+                name = default(string),
+                claims = new[] { new { type = default(string), value = default(string) } }
+            }, model =>
+                {
+                    model.Should().BeEquivalentTo(
+                        new
+                        {
+                            isAuthenticated = true,
+                            authenticationType = "AuthenticationTypes.Federation",
+                            name = "testuser123"
+                        });
+
+                    model.claims.Should().NotBeNull().And.NotBeEmpty();
+                    model.claims.Should().Contain(c => c.type == "iss" && c.value == "example-books.com");
+
+                });
     }
 }
