@@ -16,7 +16,7 @@ var inventory = builder.AddProject<Projects.InventoryService>("inventory")
     .WithExternalHttpEndpoints()
     .WithReference(pubsub);
 
-var books = builder.AddProject<Projects.BooksAPI>("books")
+var books = builder.AddProject<Projects.BooksAPI>("booksapi")
     .WithDaprSidecar(new DaprSidecarOptions
     {
         AppId = "books",
