@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace events.Models;
+namespace DataAnnotations.Models;
 
 public class EventRegistrationDTO
 {

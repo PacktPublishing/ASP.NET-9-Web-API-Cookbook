@@ -1,4 +1,4 @@
-namespace events.Models;
+namespace DataAnnotations.Models;
 
 public class PagedResult<T>
 {

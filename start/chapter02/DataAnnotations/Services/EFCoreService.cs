@@ -1,8 +1,8 @@
-using events.Repositories;
-using events.Models;
+using DataAnnotations.Repositories;
+using DataAnnotations.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace events.Services;
+namespace DataAnnotations.Services;
 
 public class EFCoreService(IEFCoreRepository repository) : IEFCoreService
 {

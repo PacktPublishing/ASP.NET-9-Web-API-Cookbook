@@ -1,5 +1,4 @@
 using Dapper;
-using System;
 using System.Data;
 
 public class GuidTypeHandler : SqlMapper.TypeHandler<Guid>

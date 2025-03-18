@@ -1,11 +1,11 @@
 using Dapper;
 using Microsoft.Data.Sqlite;
-using events.Models;
+using DataAnnotations.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace events.Repositories;
+namespace DataAnnotations.Repositories;
 
 public class DapperRepository : IDapperRepository
 {
