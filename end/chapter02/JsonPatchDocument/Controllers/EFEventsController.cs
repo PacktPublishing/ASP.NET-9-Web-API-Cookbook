@@ -6,31 +6,22 @@ using Microsoft.AspNetCore.JsonPatch;
 
 namespace events.Controllers;
 
-[Route("api/dapper/[controller]")]
+[Route("api/[controller]")]
 [ApiController]
-public class DapperEventsController : ControllerBase
+public class EFEventsController(IEFCoreService service, ILogger<EFEventsController> logger) : ControllerBase
 {
-    private readonly IDapperService _service;
-    private readonly ILogger<DapperEventsController> _logger;
-
-    public DapperEventsController(IDapperService service, ILogger<DapperEventsController> logger)
-    {
-        _service = service;
-        _logger = logger;
-    }
-
     [HttpGet]
     [EndpointSummary("Paged Event Registrations")]
-    [EndpointDescription("This returns all the event registrations from our SQLite database, using Dapper")]
+    [EndpointDescription("This returns all the event registrations from our SQLite database, using EF Core")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IReadOnlyCollection<EventRegistrationDTO>))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ResponseCache(Duration = 60, VaryByQueryKeys = new[] { "pageSize", "lastId" })] 
+    [ResponseCache(Duration = 60, VaryByQueryKeys = new[] { "pageSize", "lastId" })]
     public async Task<IActionResult> GetEventRegistrations([FromQuery] int pageSize = 10, [FromQuery] int lastId = 0)
     {
         try
         {
-            _logger.LogInformation("Fetching event registrations with pageSize: {PageSize}, lastId: {LastId}", pageSize, lastId);
-            var pagedResult = await _service.GetEventRegistrationsAsync(pageSize, lastId, Url);
+            logger.LogInformation("Fetching event registrations with pageSize: {PageSize}, lastId: {LastId}", pageSize, lastId);
+            var pagedResult = await service.GetEventRegistrationsAsync(pageSize, lastId, Url);
 
             var paginationMetadata = new
             {
@@ -52,7 +43,7 @@ public class DapperEventsController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while fetching event registrations.");
+            logger.LogError(ex, "An error occurred while fetching event registrations.");
             return StatusCode(500, "An error occurred while fetching event registrations.");
         }
     }
@@ -71,7 +62,7 @@ public class DapperEventsController : ControllerBase
 
         try
         {
-            var eventRegistration = await _service.GetEventRegistrationByIdAsync(id);
+            var eventRegistration = await service.GetEventRegistrationByIdAsync(id);
             if (eventRegistration == null)
             {
                 return NotFound();
@@ -81,7 +72,7 @@ public class DapperEventsController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while fetching event registration by Id: {Id}", id);
+            logger.LogError(ex, "An error occurred while fetching event registration by Id: {Id}", id);
             return StatusCode(500, "An error occurred while fetching event registration by Id.");
         }
     }
@@ -98,7 +89,7 @@ public class DapperEventsController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var createdEvent = await _service.CreateEventRegistrationAsync(eventRegistrationDto);
+        var createdEvent = await service.CreateEventRegistrationAsync(eventRegistrationDto);
 
         return CreatedAtAction(nameof(GetEventRegistrationById), new { id = createdEvent.Id }, createdEvent);
 
@@ -119,18 +110,18 @@ public class DapperEventsController : ControllerBase
 
         try
         {
-            var existingEvent = await _service.GetEventRegistrationByIdAsync(id);
+            var existingEvent = await service.GetEventRegistrationByIdAsync(id);
             if (existingEvent == null)
             {
                 return NotFound();
             }
 
-            await _service.UpdateEventRegistrationAsync(eventRegistrationDto);
+            await service.UpdateEventRegistrationAsync(eventRegistrationDto);
             return Ok(eventRegistrationDto);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while updating event registration with Id: {Id}", id);
+            logger.LogError(ex, "An error occurred while updating event registration with Id: {Id}", id);
             return StatusCode(500, "An error occurred while updating event registration.");
         }
     } 
@@ -150,18 +141,18 @@ public class DapperEventsController : ControllerBase
 
         try
         {
-            var existingEvent = await _service.GetEventRegistrationByIdAsync(id);
+            var existingEvent = await service.GetEventRegistrationByIdAsync(id);
             if (existingEvent == null)
             {
                 return NotFound();
             }
 
-            await _service.DeleteEventRegistrationAsync(id);
+            await service.DeleteEventRegistrationAsync(id);
             return Ok();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while deleting event registration with Id: {Id}", id);
+            logger.LogError(ex, "An error occurred while deleting event registration with Id: {Id}", id);
             return StatusCode(500, "An error occurred while deleting event registration.");
         }
     } 
@@ -183,7 +174,7 @@ public class DapperEventsController : ControllerBase
 
         try
         {
-            var existingEvent = await _service.GetEventRegistrationByIdAsync(id);
+            var existingEvent = await service.GetEventRegistrationByIdAsync(id);
             if (existingEvent == null)
             {
                 return NotFound();
@@ -196,13 +187,15 @@ public class DapperEventsController : ControllerBase
                 return BadRequest(ModelState);
             }
 
-            await _service.UpdateEventRegistrationAsync(existingEvent);
+            await service.UpdateEventRegistrationAsync(existingEvent);
             return Ok(existingEvent);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while patching event registration with Id: {Id}", id);
+            logger.LogError(ex, "An error occurred while patching event registration with Id: {Id}", id);
             return StatusCode(500, "An error occurred while patching event registration.");
         }
     }
+
+
 }
