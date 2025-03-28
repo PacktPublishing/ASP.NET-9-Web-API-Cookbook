@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Europe", "Europe\Europe.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NorthAmerica", "NorthAmerica\NorthAmerica.csproj", "{84ABC089-754C-4577-B477-8C61A10896F3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mapAPI", "mapAPI\mapAPI.csproj", "{EAC8726F-6B23-4D5F-A9C0-9DC68114836C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{84ABC089-754C-4577-B477-8C61A10896F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84ABC089-754C-4577-B477-8C61A10896F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84ABC089-754C-4577-B477-8C61A10896F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAC8726F-6B23-4D5F-A9C0-9DC68114836C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAC8726F-6B23-4D5F-A9C0-9DC68114836C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAC8726F-6B23-4D5F-A9C0-9DC68114836C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAC8726F-6B23-4D5F-A9C0-9DC68114836C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
